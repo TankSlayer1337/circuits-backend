@@ -2,6 +2,7 @@
 {
     public class ExerciseSet
     {
-        public List<Repetition> Repetitions { get; init; } = new();
+        public List<RepetitionCollection> Repetitions { get; init; } = new();
+        //public List<Repetition> Repetitions { get; init; } = new();
     }
 }
