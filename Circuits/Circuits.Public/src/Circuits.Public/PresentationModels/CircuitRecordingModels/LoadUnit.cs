@@ -3,6 +3,6 @@
     public enum LoadUnit
     {
         Kg = 0,
-        Lbs = 1
+        Lb = 1
     }
 }

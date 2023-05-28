@@ -1,4 +1,4 @@
-<mxfile host="Electron" modified="2023-05-28T09:32:39.502Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/21.2.8 Chrome/112.0.5615.165 Electron/24.2.0 Safari/537.36" etag="YQgx2x7_u5QhPZ3njJ9y" version="21.2.8" type="device">
+<mxfile host="Electron" modified="2023-05-28T12:09:03.612Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/21.2.8 Chrome/112.0.5615.165 Electron/24.2.0 Safari/537.36" etag="_cKUn8RNtOsWc3ZwpqWZ" version="21.2.8" type="device">
   <diagram id="R2lEEEUBdFMjLlhIrx00" name="Page-1">
     <mxGraphModel dx="2074" dy="1204" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0" extFonts="Permanent Marker^https://fonts.googleapis.com/css?family=Permanent+Marker">
       <root>
@@ -135,7 +135,7 @@
             <mxPoint x="490" y="820" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="jp7TUn0RlNH30Q477JoS-1" value="CircuitDefinitionModels" style="swimlane;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+        <mxCell id="jp7TUn0RlNH30Q477JoS-1" value="CircuitDefinitionModels" style="swimlane;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="80" y="360" width="1340" height="320" as="geometry" />
         </mxCell>
         <mxCell id="sjj5u9QBBr_6Ot21T0Ua-14" value="Exercise" style="swimlane;childLayout=stackLayout;horizontal=1;startSize=50;horizontalStack=0;rounded=1;fontSize=14;fontStyle=0;strokeWidth=2;resizeParent=0;resizeLast=1;shadow=0;dashed=0;align=center;arcSize=4;whiteSpace=wrap;html=1;" parent="jp7TUn0RlNH30Q477JoS-1" vertex="1">
@@ -189,16 +189,16 @@
         <mxCell id="nlcEs-kw_23XkwyBWWhw-2" value="There could be a number of standard equipments, and also user defined custom equipment." style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="jp7TUn0RlNH30Q477JoS-1" vertex="1">
           <mxGeometry x="1180" y="105" width="120" height="80" as="geometry" />
         </mxCell>
-        <mxCell id="jp7TUn0RlNH30Q477JoS-3" value="How can you know whether or not these are referenced, and if they can safely be deleted or not?" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="jp7TUn0RlNH30Q477JoS-1">
+        <mxCell id="jp7TUn0RlNH30Q477JoS-3" value="How can you know whether or not these are referenced, and if they can safely be deleted or not?" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="jp7TUn0RlNH30Q477JoS-1" vertex="1">
           <mxGeometry x="905" y="25" width="170" height="90" as="geometry" />
         </mxCell>
-        <mxCell id="jp7TUn0RlNH30Q477JoS-4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="jp7TUn0RlNH30Q477JoS-1" source="jp7TUn0RlNH30Q477JoS-3" target="sjj5u9QBBr_6Ot21T0Ua-36">
+        <mxCell id="jp7TUn0RlNH30Q477JoS-4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="jp7TUn0RlNH30Q477JoS-1" source="jp7TUn0RlNH30Q477JoS-3" target="sjj5u9QBBr_6Ot21T0Ua-36" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="jp7TUn0RlNH30Q477JoS-5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="jp7TUn0RlNH30Q477JoS-1" source="jp7TUn0RlNH30Q477JoS-3" target="sjj5u9QBBr_6Ot21T0Ua-14">
+        <mxCell id="jp7TUn0RlNH30Q477JoS-5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="jp7TUn0RlNH30Q477JoS-1" source="jp7TUn0RlNH30Q477JoS-3" target="sjj5u9QBBr_6Ot21T0Ua-14" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="jp7TUn0RlNH30Q477JoS-2" value="CircuitRecordingModels" style="swimlane;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+        <mxCell id="jp7TUn0RlNH30Q477JoS-2" value="CircuitRecordingModels" style="swimlane;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="480" y="720" width="1000" height="360" as="geometry" />
         </mxCell>
         <mxCell id="sjj5u9QBBr_6Ot21T0Ua-17" value="CircuitIteration" style="swimlane;childLayout=stackLayout;horizontal=1;startSize=50;horizontalStack=0;rounded=1;fontSize=14;fontStyle=0;strokeWidth=2;resizeParent=0;resizeLast=1;shadow=0;dashed=0;align=center;arcSize=4;whiteSpace=wrap;html=1;" parent="jp7TUn0RlNH30Q477JoS-2" vertex="1">
@@ -255,17 +255,23 @@
             <mxPoint x="670" y="360" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="jp7TUn0RlNH30Q477JoS-7" value="" style="edgeStyle=elbowEdgeStyle;fontSize=12;html=1;endArrow=ERzeroToMany;endFill=1;rounded=0;elbow=vertical;" edge="1" parent="1" source="sjj5u9QBBr_6Ot21T0Ua-14" target="sjj5u9QBBr_6Ot21T0Ua-24">
+        <mxCell id="jp7TUn0RlNH30Q477JoS-7" value="" style="edgeStyle=elbowEdgeStyle;fontSize=12;html=1;endArrow=ERzeroToMany;endFill=1;rounded=0;elbow=vertical;" parent="1" source="sjj5u9QBBr_6Ot21T0Ua-14" target="sjj5u9QBBr_6Ot21T0Ua-24" edge="1">
           <mxGeometry width="100" height="100" relative="1" as="geometry">
             <mxPoint x="330" y="800" as="sourcePoint" />
             <mxPoint x="380" y="1010" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="jp7TUn0RlNH30Q477JoS-9" value="" style="edgeStyle=elbowEdgeStyle;fontSize=12;html=1;endArrow=ERzeroToMany;endFill=1;rounded=0;elbow=vertical;" edge="1" parent="1" source="sjj5u9QBBr_6Ot21T0Ua-36" target="sjj5u9QBBr_6Ot21T0Ua-43">
+        <mxCell id="jp7TUn0RlNH30Q477JoS-9" value="" style="edgeStyle=elbowEdgeStyle;fontSize=12;html=1;endArrow=ERzeroToMany;endFill=1;rounded=0;elbow=vertical;" parent="1" source="sjj5u9QBBr_6Ot21T0Ua-36" target="sjj5u9QBBr_6Ot21T0Ua-43" edge="1">
           <mxGeometry width="100" height="100" relative="1" as="geometry">
             <mxPoint x="1510" y="560" as="sourcePoint" />
             <mxPoint x="1610" y="460" as="targetPoint" />
           </mxGeometry>
+        </mxCell>
+        <mxCell id="tBFRdw6DMG9I_aPYPl2L-3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="tBFRdw6DMG9I_aPYPl2L-2" target="jp7TUn0RlNH30Q477JoS-3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="tBFRdw6DMG9I_aPYPl2L-2" value="&lt;h1&gt;User data vs common public data&lt;br&gt;&lt;/h1&gt;&lt;p&gt;Instead of having common public data which user data references, it might be better to have common public &quot;templates&quot; that users can copy and use to create their own user data. That way it is a lot easier to know whether or not e.g. an exercise or equipment is being used, because you only need to search the user data, and the DynamoDB table can have good partitioning.&lt;/p&gt;" style="text;html=1;strokeColor=none;fillColor=none;spacing=5;spacingTop=-20;whiteSpace=wrap;overflow=hidden;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="980" y="30" width="230" height="260" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
