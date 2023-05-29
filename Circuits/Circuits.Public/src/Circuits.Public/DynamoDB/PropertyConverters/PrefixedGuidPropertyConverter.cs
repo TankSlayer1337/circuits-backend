@@ -41,12 +41,17 @@ namespace Circuits.Public.DynamoDB.PropertyConverters
 
     public class UserIdPropertyConverter : PrefixedGuidPropertyConverter
     {
-        public override string Prefix => "UserId";
+        public override string Prefix => PropertyConverterConstants.UserId;
     }
 
     public class CircuitIdPropertyConverter : PrefixedGuidPropertyConverter
     {
         public override string Prefix => PropertyConverterConstants.CircuitId;
+    }
+
+    public class ItemIdPropertyConverter : PrefixedGuidPropertyConverter
+    {
+        public override string Prefix => PropertyConverterConstants.ItemId;
     }
 
     public class EquipmentIdPropertyConverter : PrefixedGuidPropertyConverter

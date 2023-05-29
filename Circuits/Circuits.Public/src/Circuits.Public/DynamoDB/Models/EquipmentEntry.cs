@@ -1,6 +1,7 @@
 ﻿using Amazon.DynamoDBv2.DataModel;
+using Circuits.Public.DynamoDB.Models.BaseModels;
 
-namespace Circuits.Public.DynamoDB.DynamoDBModels
+namespace Circuits.Public.DynamoDB.Models
 {
     public class EquipmentEntry : TableEntry
     {
