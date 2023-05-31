@@ -15,7 +15,7 @@ namespace Circuits.Public.DynamoDB.Models.ExerciseCircuit
         [DynamoDBProperty("Index")]
         public int Index { get; init; }
 
-        [DynamoDBProperty(AttributeNames.ExerciseId)]
+        [DynamoDBProperty(AttributeNames.ID1, typeof(ExerciseIdConverter))]
         public string ExerciseId { get; init; } = string.Empty;
 
         [DynamoDBProperty("OccurrenceWeight")]

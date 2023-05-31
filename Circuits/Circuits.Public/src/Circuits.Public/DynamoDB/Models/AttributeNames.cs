@@ -1,7 +1,9 @@
 ﻿namespace Circuits.Public.DynamoDB.Models
 {
+    // TODO: sort out the difference between this and PropertyConverterConstants?
     public class AttributeNames
     {
+        public const string ID1 = "ID1";
         public const string Name = "Name";
         public const string ExerciseId = "ExerciseId";
         public const string DateCompleted = "DateCompleted";

@@ -1,4 +1,5 @@
 ﻿using Amazon.DynamoDBv2.DataModel;
+using Circuits.Public.DynamoDB.PropertyConverters;
 using Circuits.Public.DynamoDB.PropertyConverters.MultipleProperties;
 
 namespace Circuits.Public.DynamoDB.Models.CircuitIteration.IterationModels
@@ -11,7 +12,7 @@ namespace Circuits.Public.DynamoDB.Models.CircuitIteration.IterationModels
         [DynamoDBRangeKey(typeof(RecordedExercisePointerConverter))]
         public RecordedExercisePointer RecordedExercisePointer { get; init; }
 
-        [DynamoDBProperty(AttributeNames.ExerciseId)]
+        [DynamoDBProperty(AttributeNames.ID1, typeof(ExerciseIdConverter))]
         public string ExerciseId { get; init; } = string.Empty;
 
         [DynamoDBProperty(AttributeNames.DateCompleted)]

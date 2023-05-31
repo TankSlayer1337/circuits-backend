@@ -1,4 +1,5 @@
 ﻿using Amazon.DynamoDBv2.DataModel;
+using Circuits.Public.DynamoDB.PropertyConverters;
 using Circuits.Public.DynamoDB.PropertyConverters.MultipleProperties;
 
 namespace Circuits.Public.DynamoDB.Models.CircuitIteration.IterationModels.EquipmentInstance
@@ -11,7 +12,7 @@ namespace Circuits.Public.DynamoDB.Models.CircuitIteration.IterationModels.Equip
         [DynamoDBRangeKey(typeof(EquipmentInstancePointerConverter))]
         public EquipmentInstancePointer EquipmentInstancePointer { get; init; }
 
-        [DynamoDBProperty(AttributeNames.EquipmentId)]
+        [DynamoDBProperty(AttributeNames.ID1, typeof(EquipmentIdConverter))]
         public string EquipmentId { get; init; }
 
         [DynamoDBProperty(AttributeNames.Count)]
