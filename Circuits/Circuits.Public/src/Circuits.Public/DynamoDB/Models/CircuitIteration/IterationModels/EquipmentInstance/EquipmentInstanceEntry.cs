@@ -1,5 +1,5 @@
 ﻿using Amazon.DynamoDBv2.DataModel;
-using Circuits.Public.DynamoDB.PropertyConverters;
+using Circuits.Public.DynamoDB.PropertyConverters.MultipleProperties;
 
 namespace Circuits.Public.DynamoDB.Models.CircuitIteration.IterationModels.EquipmentInstance
 {

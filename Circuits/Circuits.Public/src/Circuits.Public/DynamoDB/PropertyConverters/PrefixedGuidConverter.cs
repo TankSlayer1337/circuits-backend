@@ -1,10 +1,11 @@
 ﻿using Amazon.DynamoDBv2.DataModel;
 using Amazon.DynamoDBv2.DocumentModel;
+using Circuits.Public.DynamoDB.Models;
 using System.Text.RegularExpressions;
 
 namespace Circuits.Public.DynamoDB.PropertyConverters
 {
-    public abstract class PrefixedGuidPropertyConverter : IPropertyConverter
+    public abstract class PrefixedGuidConverter : IPropertyConverter
     {
         public abstract string Prefix { get; }
 
@@ -39,28 +40,18 @@ namespace Circuits.Public.DynamoDB.PropertyConverters
         }
     }
 
-    public class UserIdPropertyConverter : PrefixedGuidPropertyConverter
+    public class UserIdPropertyConverter : PrefixedGuidConverter
     {
         public override string Prefix => PropertyConverterConstants.UserId;
     }
 
-    public class CircuitIdPropertyConverter : PrefixedGuidPropertyConverter
+    public class CircuitIdPropertyConverter : PrefixedGuidConverter
     {
         public override string Prefix => PropertyConverterConstants.CircuitId;
     }
 
-    public class ItemIdPropertyConverter : PrefixedGuidPropertyConverter
+    public class ExerciseIdPropertyConverter : PrefixedGuidConverter
     {
-        public override string Prefix => PropertyConverterConstants.ItemId;
-    }
-
-    public class EquipmentIdPropertyConverter : PrefixedGuidPropertyConverter
-    {
-        public override string Prefix => "EquipmentId";
-    }
-
-    public class ExerciseIdPropertyConverter : PrefixedGuidPropertyConverter
-    {
-        public override string Prefix => "ExerciseId";
+        public override string Prefix => AttributeNames.ExerciseId;
     }
 }
