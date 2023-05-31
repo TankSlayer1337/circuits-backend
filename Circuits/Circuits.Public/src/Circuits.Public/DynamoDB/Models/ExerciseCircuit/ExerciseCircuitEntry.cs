@@ -6,10 +6,10 @@ namespace Circuits.Public.DynamoDB.Models.ExerciseCircuit
 {
     public class ExerciseCircuitEntry : TableEntry
     {
-        [DynamoDBHashKey(typeof(UserIdPropertyConverter))]
+        [DynamoDBHashKey(typeof(UserIdConverter))]
         public string UserId { get; init; } = string.Empty;
 
-        [DynamoDBRangeKey(typeof(CircuitIdPropertyConverter))]
+        [DynamoDBRangeKey(typeof(CircuitIdConverter))]
         public string CircuitId { get; init; } = string.Empty;
 
         [DynamoDBProperty(AttributeNames.Name)]

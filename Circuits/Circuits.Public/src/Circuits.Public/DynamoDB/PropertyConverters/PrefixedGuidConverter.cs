@@ -40,18 +40,28 @@ namespace Circuits.Public.DynamoDB.PropertyConverters
         }
     }
 
-    public class UserIdPropertyConverter : PrefixedGuidConverter
+    public class UserIdConverter : PrefixedGuidConverter
     {
         public override string Prefix => PropertyConverterConstants.UserId;
     }
 
-    public class CircuitIdPropertyConverter : PrefixedGuidConverter
+    public class CircuitIdConverter : PrefixedGuidConverter
     {
         public override string Prefix => PropertyConverterConstants.CircuitId;
     }
 
-    public class ExerciseIdPropertyConverter : PrefixedGuidConverter
+    public class ExerciseIdConverter : PrefixedGuidConverter
     {
         public override string Prefix => AttributeNames.ExerciseId;
+    }
+
+    public class EquipmentIdConverter : PrefixedGuidConverter
+    {
+        public override string Prefix => AttributeNames.EquipmentId;
+    }
+
+    public class IterationIdConverter : PrefixedGuidConverter
+    {
+        public override string Prefix => PropertyConverterConstants.IterationId;
     }
 }
