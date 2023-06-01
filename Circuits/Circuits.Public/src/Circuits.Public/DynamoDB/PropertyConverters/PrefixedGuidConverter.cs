@@ -7,7 +7,7 @@ namespace Circuits.Public.DynamoDB.PropertyConverters
 {
     public abstract class PrefixedGuidConverter : IPropertyConverter
     {
-        public abstract string Prefix { get; }
+        protected abstract string _prefix { get; }
 
         public object FromEntry(DynamoDBEntry entry)
         {
@@ -17,7 +17,7 @@ namespace Circuits.Public.DynamoDB.PropertyConverters
                 throw new ArgumentOutOfRangeException(nameof(entry));
             }
 
-            string pattern = $"^{Prefix}#(?<id>{PropertyConverterConstants.GuidPattern})$";
+            string pattern = $"^{_prefix}#(?<id>{PropertyConverterConstants.GuidPattern})$";
             var regex = new Regex(pattern);
             var match = regex.Match(data);
 
@@ -33,7 +33,7 @@ namespace Circuits.Public.DynamoDB.PropertyConverters
         {
             var data = (string)value;
             if (Guid.TryParse(data, out var _)) {
-                return $"{Prefix}#{data}";
+                return $"{_prefix}#{data}";
             }
 
             throw new ArgumentOutOfRangeException(nameof (value));
@@ -42,26 +42,26 @@ namespace Circuits.Public.DynamoDB.PropertyConverters
 
     public class UserIdConverter : PrefixedGuidConverter
     {
-        public override string Prefix => PropertyConverterConstants.UserId;
+        protected override string _prefix => PropertyConverterConstants.UserId;
     }
 
     public class CircuitIdConverter : PrefixedGuidConverter
     {
-        public override string Prefix => PropertyConverterConstants.CircuitId;
+        protected override string _prefix => PropertyConverterConstants.CircuitId;
     }
 
     public class ExerciseIdConverter : PrefixedGuidConverter
     {
-        public override string Prefix => AttributeNames.ExerciseId;
+        protected override string _prefix => AttributeNames.ExerciseId;
     }
 
     public class EquipmentIdConverter : PrefixedGuidConverter
     {
-        public override string Prefix => AttributeNames.EquipmentId;
+        protected override string _prefix => AttributeNames.EquipmentId;
     }
 
     public class IterationIdConverter : PrefixedGuidConverter
     {
-        public override string Prefix => PropertyConverterConstants.IterationId;
+        protected override string _prefix => PropertyConverterConstants.IterationId;
     }
 }
