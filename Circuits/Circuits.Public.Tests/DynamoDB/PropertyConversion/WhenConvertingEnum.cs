@@ -4,7 +4,7 @@ namespace Circuits.Public.Tests.DynamoDB.PropertyConversion
 {
     public class WhenConvertingEnum
     {
-        private readonly Faker _faker = new Faker();
+        private readonly Faker _faker = new();
 
         [Fact]
         public void FromEntry()
