@@ -3,12 +3,12 @@ using Amazon.DynamoDBv2.DocumentModel;
 
 namespace Circuits.Public.DynamoDB.PropertyConverters
 {
-    public class EnumPropertyConverter : IPropertyConverter
+    public class EnumPropertyConverter<T> : IPropertyConverter where T : Enum
     {
         public object FromEntry(DynamoDBEntry entry)
         {
             if (entry == null) throw new ArgumentNullException(nameof(entry));
-            var enumValue = (int)entry;
+            var enumValue = (T)(object)entry.AsInt();
             return enumValue;
         }
 

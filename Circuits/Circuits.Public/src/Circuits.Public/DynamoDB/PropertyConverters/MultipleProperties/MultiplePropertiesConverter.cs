@@ -22,7 +22,7 @@ namespace Circuits.Public.DynamoDB.PropertyConverters.MultipleProperties
                     assembledPattern += "#";
                 var propertyName = PropertyDefinitions[i].Name;
                 var propertyPattern = PropertyDefinitions[i].RegExPattern;
-                assembledPattern += $"{propertyName}#(?<{i}>{propertyPattern})";
+                assembledPattern += $"{propertyName}#(?<g{i}>{propertyPattern})";
             }
             assembledPattern += "$";
 
@@ -34,7 +34,7 @@ namespace Circuits.Public.DynamoDB.PropertyConverters.MultipleProperties
                 var orderedValues = new List<string>();
                 for (var i = 0; i < PropertyDefinitions.Length; i++)
                 {
-                    var value = match.Groups[$"{i}"].Value;
+                    var value = match.Groups[$"g{i}"].Value;
                     orderedValues.Add(value);
                 }
 

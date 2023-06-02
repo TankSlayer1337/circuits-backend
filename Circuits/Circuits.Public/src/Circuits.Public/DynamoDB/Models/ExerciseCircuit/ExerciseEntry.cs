@@ -15,7 +15,7 @@ namespace Circuits.Public.DynamoDB.Models.ExerciseCircuit
         [DynamoDBProperty(AttributeNames.Name)]
         public string Name { get; init; } = string.Empty;
 
-        [DynamoDBProperty("RepetitionType", typeof(EnumPropertyConverter))]
+        [DynamoDBProperty("RepetitionType", typeof(EnumPropertyConverter<RepetitionType>))]
         public RepetitionType RepetitionType { get; init; }
 
         [DynamoDBProperty(AttributeNames.ID1, typeof(EquipmentIdConverter))]
