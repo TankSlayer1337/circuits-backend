@@ -1,40 +1,23 @@
-# circuits-backend
+# Circuits-Backend
 
-## Exercise examples
+## Overview
 
-### No gear
-* Jumping Jacks
-* Run
-* Pistol squat
+Circuits-Backend is a dynamic exercise planning and logging tool, offering a unique approach to fitness planning that moves beyond traditional fixed-day workout schedules. This work-in-progress application supports the creation of a flexible, user-defined exercise plan organized as a flat, adaptable list, allowing for any-time execution rather than binding users to predefined sessions.
 
-### Machine
-* Leg curl
-* Seated calf raises
-* Cable rows
+## What Sets Circuits-Backend Apart?
 
-### Free weights
-* Bench press
-* Deadlift
-* Weighted lounges
+The traditional approach to exercise planning often revolves around fixed schedules, assigning specific exercises to individual days of the week. While this structure can provide a clear routine, it lacks flexibility and doesn't always align well with users' diverse schedules and changing daily commitments.
 
-### Gear
-* Medicine ball russian twist
-* Kettle bell swings
-* Box jumps
+Circuits-Backend introduces a more adaptable structure. Users define an ordered list of exercises, which can be performed in any order and spread across any desired time frame. This flexible approach caters to the unique lifestyle and goals of each user, ensuring the training plan remains a tool for progress and not a source of stress.
 
-### Assisted
-* Assisted pull ups
-* 
+Detailed tracking features further enhance the Circuits experience, logging each completed exercise for comprehensive progress monitoring. This granular tracking empowers users to adapt their training plans effectively based on their performance.
 
+## Repository Contents
 
-## How to model an exercise repetition
-### Gear + amount model
-You could think about it that either you do not use any gear (only bodyweight) or you use some kind of gear, e.g. a dumbbell. The gear can optionally have a load that is either positive (makes the exercise more difficult) or negative (assists in the exercise).
+This repository houses the backend component of the Circuits application. It contains the necessary data models, API endpoints, and underlying business logic that powers the core functionality of the application.
 
-You would then need a way of keeping track of the repetition/set amount. An amount could be repetitions in the case of a deadlift, or seconds in the case of a plank, or minutes in the case of a run.
+Note: The corresponding frontend application, which communicates with this backend, resides in a separate repository (link to be added once available).
 
-The relation between equipment and repetitions should be such that duplicate data is avoided (i.e. since multiple repetitions probably use the same equipment, each repetition should not contain the information about the equipment).
+## Development Stage
 
-The repititions and which equipment that was used needs to be ordered. e.g. one could do a set of DB shrugs consisting of 5 reps of heavy weight and 5 of lighter.
-
-### Resistance model
+Circuits-Backend is currently in the early stages of development. While the work is ongoing, with continuous refinement and functionality improvement, it is not currently ready for external contributions or feedback. However, stay tuned for updates as the project progresses and evolves!
