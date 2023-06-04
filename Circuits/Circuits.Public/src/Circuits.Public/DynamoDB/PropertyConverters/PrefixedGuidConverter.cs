@@ -64,4 +64,9 @@ namespace Circuits.Public.DynamoDB.PropertyConverters
     {
         protected override string _prefix => PropertyConverterConstants.IterationId;
     }
+
+    public class ItemIdConverter : PrefixedGuidConverter
+    {
+        protected override string _prefix => PropertyConverterConstants.ItemId;
+    }
 }

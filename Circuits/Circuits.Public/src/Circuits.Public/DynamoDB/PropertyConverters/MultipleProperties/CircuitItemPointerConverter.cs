@@ -10,12 +10,12 @@ namespace Circuits.Public.DynamoDB.PropertyConverters.MultipleProperties
         {
             new PropertyDefinition
             {
-                Name = PropertyConverterConstants.CircuitId,
+                Name = PropertyConverterConstants.UserId,
                 RegExPattern = GuidPattern
             },
             new PropertyDefinition
             {
-                Name = PropertyConverterConstants.ItemId,
+                Name = PropertyConverterConstants.CircuitId,
                 RegExPattern = GuidPattern
             }
         };
@@ -24,14 +24,14 @@ namespace Circuits.Public.DynamoDB.PropertyConverters.MultipleProperties
         {
             return new CircuitItemPointer
             {
-                CircuitId = orderedValues[0],
-                ItemId = orderedValues[1]
+                UserId = orderedValues[0],
+                CircuitId = orderedValues[1]
             };
         }
 
         public override List<string> ToOrderedValues(CircuitItemPointer model)
         {
-            return new List<string> { model.CircuitId, model.ItemId };
+            return new List<string> { model.UserId, model.CircuitId };
         }
     }
 }

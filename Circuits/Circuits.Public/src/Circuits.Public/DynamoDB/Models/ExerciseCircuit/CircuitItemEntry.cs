@@ -6,11 +6,11 @@ namespace Circuits.Public.DynamoDB.Models.ExerciseCircuit
 {
     public class CircuitItemEntry
     {
-        [DynamoDBHashKey(typeof(UserIdConverter))]
-        public string UserId { get; init; } = string.Empty;
-
-        [DynamoDBRangeKey(typeof(CircuitItemPointerConverter))]
+        [DynamoDBHashKey(typeof(CircuitItemPointerConverter))]
         public CircuitItemPointer Pointer { get; init; }
+
+        [DynamoDBRangeKey(PropertyConverterConstants.ItemId, typeof(ItemIdConverter))]
+        public string ItemId { get; init; } = string.Empty;
 
         [DynamoDBProperty("Index")]
         public int Index { get; init; }
