@@ -18,10 +18,12 @@ export class ExerciseCircuitsBackendStack extends cdk.Stack {
 
     var userPool = this.setupCognitoUserPool(projectName, stage);
 
-    const table = new Table(this, `${projectName}-table-${this.region}-${stage}`, {
+    const table = new Table(this, `DynamoDBTable`, {
+      tableName: `${projectName}-table-${this.region}-${stage}`,
       partitionKey: { name: 'PK', type: AttributeType.STRING },
       sortKey: { name: 'SK', type: AttributeType.STRING },
-      billingMode: BillingMode.PAY_PER_REQUEST
+      billingMode: BillingMode.PAY_PER_REQUEST,
+      removalPolicy: cdk.RemovalPolicy.DESTROY
     });
 
     const lambdaFunction = new Function(this, 'UserDataLambda', {
@@ -31,7 +33,10 @@ export class ExerciseCircuitsBackendStack extends cdk.Stack {
       handler: projectName,
       timeout: cdk.Duration.seconds(10),
       memorySize: 256,
-      reservedConcurrentExecutions: 2
+      reservedConcurrentExecutions: 2,
+      environment: {
+        'TABLE_NAME': table.tableName 
+      }
     });
 
     table.grantReadWriteData(lambdaFunction);

@@ -4,7 +4,8 @@
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "TABLE_NAME": "exercise-circuits-backend-table-eu-north-1-dev"
       },
       "applicationUrl": "https://localhost:61805;http://localhost:61806"
     }

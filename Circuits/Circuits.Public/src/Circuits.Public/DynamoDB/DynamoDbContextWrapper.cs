@@ -7,15 +7,21 @@ namespace Circuits.Public.DynamoDB
     public class DynamoDbContextWrapper
     {
         private readonly DynamoDBContext _dynamoDbContext;
+        private readonly string _tableName;
 
         public DynamoDbContextWrapper(AmazonDynamoDBClient dynamoDBClient)
         {
             _dynamoDbContext = new(dynamoDBClient);
+            _tableName = Environment.GetEnvironmentVariable("TABLE_NAME") ?? throw new NullReferenceException();
         }
 
         public Task SaveAsync<T>(T item) where T : class
         {
-            return _dynamoDbContext.SaveAsync(item);
+            var config = new DynamoDBOperationConfig
+            {
+                OverrideTableName = _tableName
+            };
+            return _dynamoDbContext.SaveAsync(item, config);
         }
     }
 }
