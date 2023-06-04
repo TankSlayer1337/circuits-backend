@@ -6,6 +6,12 @@ namespace Circuits.Public.Controllers
 {
     public class CircuitsController : ControllerBase
     {
+        [HttpPost("exercises")]
+        public async Task<ActionResult<string>> AddExercise([FromServices] CircuitsRepository circuitsRepository, [FromBody] AddExerciseRequest request)
+        {
+            return await circuitsRepository.AddExerciseAsync(request);
+        }
+
         [HttpPost("circuits")]
         public async Task<ActionResult<string>> AddCircuit([FromServices] CircuitsRepository circuitsRepository, [FromBody] AddCircuitRequest request)
         {
@@ -17,9 +23,7 @@ namespace Circuits.Public.Controllers
             // get user info from endpoint using access token
 
             // add circuit to dynamodb table
-            var circuitId = await circuitsRepository.AddCircuitAsync(request.UserId, request.Name);
-
-            return circuitId;
+            return await circuitsRepository.AddCircuitAsync(request.UserId, request.Name);
         }
     }
 }

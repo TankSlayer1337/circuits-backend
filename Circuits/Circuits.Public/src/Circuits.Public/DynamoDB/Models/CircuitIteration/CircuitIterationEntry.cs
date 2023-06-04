@@ -1,11 +1,10 @@
 ﻿using Amazon.DynamoDBv2.DataModel;
-using Circuits.Public.DynamoDB.Models.BaseModels;
 using Circuits.Public.DynamoDB.PropertyConverters;
 using Circuits.Public.DynamoDB.PropertyConverters.MultipleProperties;
 
 namespace Circuits.Public.DynamoDB.Models.CircuitIteration
 {
-    public class CircuitIterationEntry : TableEntry
+    public class CircuitIterationEntry
     {
         [DynamoDBHashKey(typeof(CircuitPointerConverter))]
         public CircuitPointer CircuitIterationPointer { get; init; }
