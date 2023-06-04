@@ -9,10 +9,10 @@ namespace Circuits.Public.Tests.DynamoDB.PropertyConversion.MultipleProperties
         {
             var propertyInstance = new CircuitItemPointer
             {
+                UserId = TestData.CreateRandomGuidValue(),
                 CircuitId = TestData.CreateRandomGuidValue(),
-                ItemId = TestData.CreateRandomGuidValue(),
             };
-            var expectedEntryValue = $"CircuitId#{propertyInstance.CircuitId}#ItemId#{propertyInstance.ItemId}";
+            var expectedEntryValue = $"UserId#{propertyInstance.UserId}#CircuitId#{propertyInstance.CircuitId}";
             return (propertyInstance, expectedEntryValue);
         }
     }

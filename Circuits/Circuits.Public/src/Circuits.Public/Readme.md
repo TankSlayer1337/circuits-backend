@@ -14,22 +14,6 @@ To deploy as an executable assembly the Lambda runtime client must be started to
 `Amazon.Lambda.AspNetCoreServer.Hosting` NuGet package and calling `AddAWSLambdaHosting(LambdaEventSource.HttpApi)` passing in the event source while configuring the services of the application. The
 event source can be API Gateway REST API and HTTP API or Application Load Balancer.  
 
-### Project Files ###
-
-* serverless.template - an AWS CloudFormation Serverless Application Model template file for declaring your Serverless functions and other AWS resources
-* aws-lambda-tools-defaults.json - default argument settings for use with Visual Studio and command line deployment tools for AWS
-* Program.cs - entry point to the application that contains all of the top level statements initializing the ASP.NET Core application.
-The call to `AddAWSLambdaHosting` configures the application to work in Lambda when it detects Lambda is the executing environment. 
-* Controllers\CalculatorController - example Web API controller
-
-You may also have a test project depending on the options selected.
-
-## Here are some steps to follow from Visual Studio:
-
-To deploy your Serverless application, right click the project in Solution Explorer and select *Publish to AWS Lambda*.
-
-To view your deployed application open the Stack View window by double-clicking the stack name shown beneath the AWS CloudFormation node in the AWS Explorer tree. The Stack View also displays the root URL to your published application.
-
 ## Here are some steps to follow to get started from the command line:
 
 Once you have edited your template and code you can deploy your application using the [Amazon.Lambda.Tools Global Tool](https://github.com/aws/aws-extensions-for-dotnet-cli#aws-lambda-amazonlambdatools) from the command line.
