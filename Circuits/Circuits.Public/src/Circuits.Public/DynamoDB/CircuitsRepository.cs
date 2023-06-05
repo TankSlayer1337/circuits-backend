@@ -1,6 +1,5 @@
 ﻿using Amazon.DynamoDBv2.DocumentModel;
 using Circuits.Public.Controllers.Models.AddRequests;
-using Circuits.Public.Controllers.Models.GetRequests;
 using Circuits.Public.DynamoDB.Models.ExerciseCircuit;
 using Circuits.Public.PresentationModels.CircuitDefinitionModels;
 
@@ -65,13 +64,21 @@ namespace Circuits.Public.DynamoDB
                 UserId = userId,
                 CircuitId = circuitId
             };
-            var itemEntries = await _dynamoDbContext.QueryAsync<CircuitItem>(pointer, QueryOperator.BeginsWith, new string[] { string.Empty });
-            var items = itemEntries.Select(entry => new CircuitItem
+            var itemEntries = await _dynamoDbContext.QueryAsync<CircuitItemEntry>(pointer, QueryOperator.BeginsWith, new string[] { string.Empty });
+            var items = new List<CircuitItem>();
+            foreach (var entry in itemEntries)
             {
-                Index = entry.Index,
-                OccurrenceWeight = entry.OccurrenceWeight,
-                Exercise = entry.Exercise,
-            })
+                var exercise = await GetExerciseAsync(userId, entry.ExerciseId);
+                var item = new CircuitItem
+                {
+                    Index = entry.Index,
+                    OccurrenceWeight = entry.OccurrenceWeight,
+                    Exercise = exercise
+                };
+                items.Add(item);
+            }
+            var sortedItems = items.OrderBy(item => item.Index).ToList();
+            return sortedItems;
         }
 
         public async Task<string> AddExerciseAsync(AddExerciseRequest request)
@@ -86,6 +93,39 @@ namespace Circuits.Public.DynamoDB
             };
             await _dynamoDbContext.SaveAsync(exerciseEntry);
             return exerciseEntry.ExerciseId;
+        }
+
+        public async Task<List<Exercise>> GetExercisesAsync(string userId)
+        {
+            var exerciseEntries = await _dynamoDbContext.QueryAsync<ExerciseEntry>(userId, QueryOperator.BeginsWith, new string[] { string.Empty });
+            var exercises = new List<Exercise>();
+            foreach (var entry in exerciseEntries)
+            {
+                var defaultEquipment = string.IsNullOrEmpty(entry.DefaultEquipmentId) ? null : await GetEquipmentAsync(userId, entry.DefaultEquipmentId);
+                var exercise = new Exercise
+                {
+                    Id = entry.ExerciseId,
+                    Name = entry.Name,
+                    RepetitionType = entry.RepetitionType,
+                    DefaultEquipment = defaultEquipment
+                };
+                exercises.Add(exercise);
+            };
+            return exercises;
+        }
+
+        private async Task<Exercise> GetExerciseAsync(string userId, string exerciseId)
+        {
+            var exerciseEntries = await _dynamoDbContext.QueryAsync<ExerciseEntry>(userId, QueryOperator.Equal, new string[] { exerciseId });
+            var exercise = exerciseEntries.Single();
+            var defaultEquipment = string.IsNullOrEmpty(exercise.DefaultEquipmentId) ? null : await GetEquipmentAsync(userId, exercise.DefaultEquipmentId);
+            return new Exercise
+            {
+                Id = exercise.ExerciseId,
+                Name = exercise.Name,
+                RepetitionType = exercise.RepetitionType,
+                DefaultEquipment = defaultEquipment
+            };
         }
 
         public async Task<string> AddEquipmentAsync(AddEquipmentRequest request)
@@ -110,6 +150,18 @@ namespace Circuits.Public.DynamoDB
                 Name = entry.Name,
             });
             return equipment.ToList();
+        }
+
+        private async Task<Equipment> GetEquipmentAsync(string userId, string equipmentId)
+        {
+            var equipmentEntries = await _dynamoDbContext.QueryAsync<EquipmentEntry>(userId, QueryOperator.Equal, new string[] { equipmentId });
+            var equipmentEntry = equipmentEntries.Single();
+            return new Equipment
+            {
+                Id = equipmentEntry.EquipmentId,
+                Name = equipmentEntry.Name,
+                CanBeUsedInMultiples = equipmentEntry.CanBeUsedInMultiples
+            };
         }
     }
 }

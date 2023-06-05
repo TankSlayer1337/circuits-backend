@@ -11,6 +11,8 @@ namespace Circuits.Public.Controllers
         private readonly CircuitsRepository _circuitsRepository;
         private const string Equipment = "equipment";
         private const string Circuits = "circuits";
+        private const string Exercises = "exercises";
+        private const string Items = "items";
 
         public CircuitsController(CircuitsRepository circuitsRepository)
         {
@@ -29,10 +31,16 @@ namespace Circuits.Public.Controllers
             return await _circuitsRepository.GetEquipmentAsync(request.UserId);
         }
         
-        [HttpPost("exercises")]
+        [HttpPost(Exercises)]
         public async Task<ActionResult<string>> AddExercise([FromBody] AddExerciseRequest request)
         {
             return await _circuitsRepository.AddExerciseAsync(request);
+        }
+
+        [HttpGet(Exercises)]
+        public async Task<ActionResult<List<Exercise>>> GetExercises([FromBody] GetAllRequest request)
+        {
+            return await _circuitsRepository.GetExercisesAsync(request.UserId);
         }
 
         [HttpPost(Circuits)]
@@ -55,10 +63,16 @@ namespace Circuits.Public.Controllers
             return await _circuitsRepository.GetCircuitsAsync(request.UserId);
         }
 
-        [HttpPost("circuits/items")]
+        [HttpPost(Items)]
         public async Task<ActionResult<string>> AddCircuitItem([FromBody] AddItemRequest request)
         {
             return await _circuitsRepository.AddItemAsync(request);
+        }
+
+        [HttpGet(Items)]
+        public async Task<ActionResult<List<CircuitItem>>> GetCircuitItems([FromBody] GetItemsRequest request)
+        {
+            return await _circuitsRepository.GetItemsAsync(request.UserId, request.CircuitId);
         }
     }
 }
