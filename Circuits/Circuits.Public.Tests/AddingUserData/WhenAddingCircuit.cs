@@ -20,16 +20,16 @@ namespace Circuits.Public.Tests.AddingUserData
             };
 
             // GIVEN DynamoDB is simulated
-            ExerciseCircuitEntry? savedEntry = null;
-            _contextWrapperMocker.SimulateSaveAsync<ExerciseCircuitEntry>(item => savedEntry = item);
+            CircuitEntry? savedEntry = null;
+            _contextWrapperMocker.SimulateSaveAsync<CircuitEntry>(item => savedEntry = item);
 
             // WHEN adding circuit
             var circuitsController = TestHelper.BuildCircuitsController(_contextWrapperMocker);
             var result = await circuitsController.AddCircuit(request);
 
             // THEN the circuit should be saved to DynamoDB
-            _contextWrapperMocker.Mock.Verify(mock => mock.SaveAsync(It.IsAny<ExerciseCircuitEntry>()), Times.Once);
-            var expectedEntry = new ExerciseCircuitEntry
+            _contextWrapperMocker.Mock.Verify(mock => mock.SaveAsync(It.IsAny<CircuitEntry>()), Times.Once);
+            var expectedEntry = new CircuitEntry
             {
                 UserId = request.UserId,
                 CircuitId = result.Value,

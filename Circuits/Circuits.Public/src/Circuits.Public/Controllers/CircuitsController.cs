@@ -58,7 +58,7 @@ namespace Circuits.Public.Controllers
         }
 
         [HttpGet(Circuits)]
-        public async Task<ActionResult<List<ExerciseCircuit>>> GetCircuits([FromBody] GetAllRequest request)
+        public async Task<ActionResult<List<Circuit>>> GetCircuits([FromBody] GetAllRequest request)
         {
             return await _circuitsRepository.GetCircuitsAsync(request.UserId);
         }
@@ -70,7 +70,7 @@ namespace Circuits.Public.Controllers
         }
 
         [HttpGet(Items)]
-        public async Task<ActionResult<List<CircuitItem>>> GetCircuitItems([FromBody] GetItemsRequest request)
+        public async Task<ActionResult<List<Item>>> GetCircuitItems([FromBody] GetItemsRequest request)
         {
             return await _circuitsRepository.GetItemsAsync(request.UserId, request.CircuitId);
         }

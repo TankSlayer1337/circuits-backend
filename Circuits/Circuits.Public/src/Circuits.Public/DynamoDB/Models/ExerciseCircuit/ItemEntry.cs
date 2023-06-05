@@ -1,10 +1,11 @@
 ﻿using Amazon.DynamoDBv2.DataModel;
+using Circuits.Public.Controllers.Models.AddRequests;
 using Circuits.Public.DynamoDB.PropertyConverters;
 using Circuits.Public.DynamoDB.PropertyConverters.MultipleProperties;
 
 namespace Circuits.Public.DynamoDB.Models.ExerciseCircuit
 {
-    public class CircuitItemEntry
+    public class ItemEntry
     {
         [DynamoDBHashKey(AttributeNames.PK, typeof(CircuitItemPointerConverter))]
         public CircuitItemPointer Pointer { get; init; }
@@ -20,5 +21,22 @@ namespace Circuits.Public.DynamoDB.Models.ExerciseCircuit
 
         [DynamoDBProperty("OccurrenceWeight")]
         public uint OccurrenceWeight { get; init; }
+
+        public static ItemEntry FromRequest(AddItemRequest request)
+        {
+            var pointer = new CircuitItemPointer
+            {
+                UserId = request.UserId,
+                CircuitId = request.CircuitId
+            };
+            return new ItemEntry
+            {
+                Pointer = pointer,
+                ItemId = Guid.NewGuid().ToString(),
+                Index = request.Index,
+                ExerciseId = request.ExerciseId,
+                OccurrenceWeight = request.OccurrenceWeight
+            };
+        }
     }
 }

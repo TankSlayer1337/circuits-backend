@@ -1,6 +1,6 @@
 ﻿namespace Circuits.Public.PresentationModels.CircuitDefinitionModels
 {
-    public class CircuitItem
+    public class Item
     {
         public string ItemId { get; init; } = string.Empty;
         public uint Index { get; init; }
