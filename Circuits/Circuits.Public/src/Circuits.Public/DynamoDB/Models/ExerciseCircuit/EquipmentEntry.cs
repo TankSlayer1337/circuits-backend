@@ -5,14 +5,14 @@ namespace Circuits.Public.DynamoDB.Models.ExerciseCircuit
 {
     public class EquipmentEntry
     {
-        [DynamoDBHashKey(typeof(UserIdConverter))]
+        [DynamoDBHashKey(AttributeNames.PK, typeof(UserIdConverter))]
         public string UserId { get; init; } = string.Empty;
 
-        [DynamoDBRangeKey(typeof(EquipmentIdConverter))]
+        [DynamoDBRangeKey(AttributeNames.SK, typeof(EquipmentIdConverter))]
         public string EquipmentId { get; init; } = string.Empty;
 
         [DynamoDBProperty("Name")]
-        public string EquipmentName { get; init; } = string.Empty;
+        public string Name { get; init; } = string.Empty;
 
         [DynamoDBProperty("CanBeUsedInMultiples")]
         public bool CanBeUsedInMultiples { get; init; }

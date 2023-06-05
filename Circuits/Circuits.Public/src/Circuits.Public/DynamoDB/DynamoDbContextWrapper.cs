@@ -4,7 +4,7 @@ using Amazon.DynamoDBv2.DataModel;
 namespace Circuits.Public.DynamoDB
 {
     // TODO: create interface and use it instead of this class directly.
-    public class DynamoDbContextWrapper
+    public class DynamoDbContextWrapper : IDynamoDbContextWrapper
     {
         private readonly DynamoDBContext _dynamoDbContext;
         private readonly string _tableName;

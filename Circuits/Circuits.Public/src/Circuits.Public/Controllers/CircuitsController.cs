@@ -6,14 +6,27 @@ namespace Circuits.Public.Controllers
 {
     public class CircuitsController : ControllerBase
     {
-        [HttpPost("exercises")]
-        public async Task<ActionResult<string>> AddExercise([FromServices] CircuitsRepository circuitsRepository, [FromBody] AddExerciseRequest request)
+        private readonly CircuitsRepository _circuitsRepository;
+
+        public CircuitsController(CircuitsRepository circuitsRepository)
         {
-            return await circuitsRepository.AddExerciseAsync(request);
+            _circuitsRepository = circuitsRepository;
+        }
+
+        [HttpPost("equipment")]
+        public async Task<ActionResult<string>> AddEquipment([FromBody] AddEquipmentRequest request)
+        {
+            return await _circuitsRepository.AddEquipmentAsync(request);
+        }
+        
+        [HttpPost("exercises")]
+        public async Task<ActionResult<string>> AddExercise([FromBody] AddExerciseRequest request)
+        {
+            return await _circuitsRepository.AddExerciseAsync(request);
         }
 
         [HttpPost("circuits")]
-        public async Task<ActionResult<string>> AddCircuit([FromServices] CircuitsRepository circuitsRepository, [FromBody] AddCircuitRequest request)
+        public async Task<ActionResult<string>> AddCircuit([FromBody] AddCircuitRequest request)
         {
             //var authorizationHeaderValue = Request.Headers["Authorization"].ToString();
             //var accessToken = authorizationHeaderValue.Replace("Bearer ", string.Empty);
@@ -23,7 +36,13 @@ namespace Circuits.Public.Controllers
             // get user info from endpoint using access token
 
             // add circuit to dynamodb table
-            return await circuitsRepository.AddCircuitAsync(request.UserId, request.Name);
+            return await _circuitsRepository.AddCircuitAsync(request.UserId, request.Name);
+        }
+
+        [HttpPost("circuits/item")]
+        public async Task<ActionResult<string>> AddCircuitItem([FromBody] AddItemRequest request)
+        {
+            return await _circuitsRepository.AddItemAsync(request);
         }
     }
 }

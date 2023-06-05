@@ -6,19 +6,19 @@ namespace Circuits.Public.DynamoDB.Models.ExerciseCircuit
 {
     public class CircuitItemEntry
     {
-        [DynamoDBHashKey(typeof(CircuitItemPointerConverter))]
+        [DynamoDBHashKey(AttributeNames.PK, typeof(CircuitItemPointerConverter))]
         public CircuitItemPointer Pointer { get; init; }
 
-        [DynamoDBRangeKey(PropertyConverterConstants.ItemId, typeof(ItemIdConverter))]
+        [DynamoDBRangeKey(AttributeNames.SK, typeof(ItemIdConverter))]
         public string ItemId { get; init; } = string.Empty;
 
         [DynamoDBProperty("Index")]
-        public int Index { get; init; }
+        public uint Index { get; init; }
 
         [DynamoDBProperty(AttributeNames.ID1, typeof(ExerciseIdConverter))]
         public string ExerciseId { get; init; } = string.Empty;
 
         [DynamoDBProperty("OccurrenceWeight")]
-        public int OccurrenceWeight { get; init; }
+        public uint OccurrenceWeight { get; init; }
     }
 }
