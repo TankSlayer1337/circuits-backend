@@ -1,5 +1,8 @@
-﻿using Circuits.Public.Controllers.Models;
+﻿using Amazon.DynamoDBv2.DocumentModel;
+using Circuits.Public.Controllers.Models.AddRequests;
+using Circuits.Public.Controllers.Models.GetRequests;
 using Circuits.Public.DynamoDB.Models.ExerciseCircuit;
+using Circuits.Public.PresentationModels.CircuitDefinitionModels;
 
 namespace Circuits.Public.DynamoDB
 {
@@ -24,6 +27,17 @@ namespace Circuits.Public.DynamoDB
             return circuitEntry.CircuitId;
         }
 
+        public async Task<List<ExerciseCircuit>> GetCircuitsAsync(string userId)
+        {
+            var circuitEntries = await _dynamoDbContext.QueryAsync<ExerciseCircuitEntry>(userId, QueryOperator.BeginsWith, new string[] { string.Empty });
+            var circuits = circuitEntries.Select(entry => new ExerciseCircuit
+            {
+                Id = entry.CircuitId,
+                Name = entry.Name
+            });
+            return circuits.ToList();
+        }
+
         public async Task<string> AddItemAsync(AddItemRequest request)
         {
             // TODO: validate the request, e.g. does the ExerciseId exist?
@@ -42,6 +56,22 @@ namespace Circuits.Public.DynamoDB
             };
             await _dynamoDbContext.SaveAsync(itemEntry);
             return itemEntry.ItemId;
+        }
+
+        public async Task<List<CircuitItem>> GetItemsAsync(string userId, string circuitId)
+        {
+            var pointer = new CircuitItemPointer
+            {
+                UserId = userId,
+                CircuitId = circuitId
+            };
+            var itemEntries = await _dynamoDbContext.QueryAsync<CircuitItem>(pointer, QueryOperator.BeginsWith, new string[] { string.Empty });
+            var items = itemEntries.Select(entry => new CircuitItem
+            {
+                Index = entry.Index,
+                OccurrenceWeight = entry.OccurrenceWeight,
+                Exercise = entry.Exercise,
+            })
         }
 
         public async Task<string> AddExerciseAsync(AddExerciseRequest request)
@@ -69,6 +99,17 @@ namespace Circuits.Public.DynamoDB
             };
             await _dynamoDbContext.SaveAsync(equipmentEntry);
             return equipmentEntry.EquipmentId;
+        }
+
+        public async Task<List<Equipment>> GetEquipmentAsync(string userId)
+        {
+            var equipmentEntries = await _dynamoDbContext.QueryAsync<EquipmentEntry>(userId, QueryOperator.BeginsWith, new string[] { string.Empty });
+            var equipment = equipmentEntries.Select(entry => new Equipment
+            {
+                Id = entry.EquipmentId,
+                Name = entry.Name,
+            });
+            return equipment.ToList();
         }
     }
 }

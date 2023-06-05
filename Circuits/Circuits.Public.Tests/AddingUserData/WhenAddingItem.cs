@@ -1,4 +1,4 @@
-﻿using Circuits.Public.Controllers.Models;
+﻿using Circuits.Public.Controllers.Models.AddRequests;
 using Circuits.Public.DynamoDB.Models.ExerciseCircuit;
 using Circuits.Public.Tests.Mockers;
 
