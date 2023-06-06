@@ -34,5 +34,18 @@
             // THEN the entry value should have the correct prefixed value
             result.AsString().Should().Be($"{testConverter.Prefix}#{guidValue}");
         }
+
+        [Fact]
+        public void ToEntryWithEmptyValueToSupportQueriesUsingObjectPersistenceModel()
+        {
+            // GIVEN a PrefixedGuidConverter instance
+            var testConverter = new PrefixedGuidTestConverter();
+
+            // WHEN converting to entry with empty value
+            var result = testConverter.ToEntry(string.Empty);
+
+            // THEN the entry value should have the correct prefixed value
+            result.AsString().Should().Be($"{testConverter.Prefix}#");
+        }
     }
 }

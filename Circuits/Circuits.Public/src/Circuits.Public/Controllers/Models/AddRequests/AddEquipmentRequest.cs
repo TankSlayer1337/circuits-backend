@@ -1,4 +1,4 @@
-﻿namespace Circuits.Public.Controllers.Models
+﻿namespace Circuits.Public.Controllers.Models.AddRequests
 {
     public class AddEquipmentRequest
     {

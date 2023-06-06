@@ -32,11 +32,7 @@ namespace Circuits.Public.DynamoDB.PropertyConverters
         public DynamoDBEntry ToEntry(object value)
         {
             var data = (string)value;
-            if (Guid.TryParse(data, out var _)) {
-                return $"{_prefix}#{data}";
-            }
-
-            throw new ArgumentOutOfRangeException(nameof (value));
+            return $"{_prefix}#{data}";
         }
     }
 

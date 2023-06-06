@@ -1,4 +1,5 @@
 ﻿using Amazon.DynamoDBv2.DataModel;
+using Circuits.Public.Controllers.Models.AddRequests;
 using Circuits.Public.DynamoDB.PropertyConverters;
 
 namespace Circuits.Public.DynamoDB.Models.ExerciseCircuit
@@ -16,5 +17,16 @@ namespace Circuits.Public.DynamoDB.Models.ExerciseCircuit
 
         [DynamoDBProperty("CanBeUsedInMultiples")]
         public bool CanBeUsedInMultiples { get; init; }
+
+        public static EquipmentEntry FromRequest(AddEquipmentRequest request)
+        {
+            return new EquipmentEntry
+            {
+                UserId = request.UserId,
+                EquipmentId = Guid.NewGuid().ToString(),
+                Name = request.Name,
+                CanBeUsedInMultiples = request.CanBeUsedInMultiples
+            };
+        }
     }
 }

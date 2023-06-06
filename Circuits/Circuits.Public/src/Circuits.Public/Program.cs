@@ -11,7 +11,7 @@ builder.Services.AddControllers();
 builder.Services.AddAWSLambdaHosting(LambdaEventSource.RestApi);
 
 builder.Services.AddTransient<CircuitsRepository>();
-builder.Services.AddScoped<DynamoDbContextWrapper>();
+builder.Services.AddScoped<IDynamoDbContextWrapper, DynamoDbContextWrapper>();
 builder.Services.AddScoped<AmazonDynamoDBClient>();
 
 var app = builder.Build();
