@@ -42,7 +42,7 @@ namespace Circuits.Public.Tests.GettingUserData
         {
             var equipmentEntries = new List<EquipmentEntry>();
             var entriesCount = _faker.Random.Int(1, 10);
-            for (int i = 0; i < entriesCount; i++)
+            for (var i = 0; i < entriesCount; i++)
             {
                 equipmentEntries.Add(new EquipmentEntry
                 {
