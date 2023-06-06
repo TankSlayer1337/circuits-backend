@@ -66,14 +66,7 @@ namespace Circuits.Public.DynamoDB
 
         public async Task<string> AddExerciseAsync(AddExerciseRequest request)
         {
-            var exerciseEntry = new ExerciseEntry
-            {
-                UserId = request.UserId,
-                ExerciseId = Guid.NewGuid().ToString(),
-                Name = request.Name,
-                RepetitionType = request.RepetitionType,
-                DefaultEquipmentId = request.DefaultEquipmentId
-            };
+            var exerciseEntry = ExerciseEntry.FromRequest(request);
             await _dynamoDbContext.SaveAsync(exerciseEntry);
             return exerciseEntry.ExerciseId;
         }
@@ -113,13 +106,7 @@ namespace Circuits.Public.DynamoDB
 
         public async Task<string> AddEquipmentAsync(AddEquipmentRequest request)
         {
-            var equipmentEntry = new EquipmentEntry
-            {
-                UserId = request.UserId,
-                EquipmentId = Guid.NewGuid().ToString(),
-                Name = request.Name,
-                CanBeUsedInMultiples = request.CanBeUsedInMultiples
-            };
+            var equipmentEntry = EquipmentEntry.FromRequest(request);
             await _dynamoDbContext.SaveAsync(equipmentEntry);
             return equipmentEntry.EquipmentId;
         }
@@ -131,6 +118,7 @@ namespace Circuits.Public.DynamoDB
             {
                 Id = entry.EquipmentId,
                 Name = entry.Name,
+                CanBeUsedInMultiples = entry.CanBeUsedInMultiples
             });
             return equipment.ToList();
         }
