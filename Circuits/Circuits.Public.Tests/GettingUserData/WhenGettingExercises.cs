@@ -22,7 +22,7 @@ namespace Circuits.Public.Tests.GettingUserData
             var equipmentEntries = RandomCreator.CreateEquipmentEntries(userId);
 
             // GIVEN user has exercise entries
-            var exerciseEntries = CreateRandomExerciseEntries(userId, equipmentEntries);
+            var exerciseEntries = RandomCreator.CreateExerciseEntries(userId, equipmentEntries);
 
             // GIVEN DynamoDB is simulated
             foreach(var entry in equipmentEntries)
@@ -36,51 +36,8 @@ namespace Circuits.Public.Tests.GettingUserData
             var results = await circuitsController.GetExercises(new GetAllRequest { UserId = userId });
 
             // THEN the correct exercise representations are returned
-            IEnumerable<Exercise> expectedResults = CreateExercises(equipmentEntries, exerciseEntries);
+            IEnumerable<Exercise> expectedResults = DataCreator.CreateExercises(equipmentEntries, exerciseEntries);
             results.Value.Should().BeEquivalentTo(expectedResults);
-        }
-
-        private static IEnumerable<Exercise> CreateExercises(List<EquipmentEntry> equipmentEntries, List<ExerciseEntry> exerciseEntries)
-        {
-            return exerciseEntries.Select(entry =>
-            {
-                Equipment? defaultEquipment = null;
-                if (!string.IsNullOrEmpty(entry.DefaultEquipmentId))
-                {
-                    var equipmentEntry = equipmentEntries.Single(equipment => equipment.EquipmentId == entry.DefaultEquipmentId);
-                    defaultEquipment = new Equipment
-                    {
-                        Id = equipmentEntry.EquipmentId,
-                        Name = equipmentEntry.Name,
-                        CanBeUsedInMultiples = equipmentEntry.CanBeUsedInMultiples
-                    };
-                }
-                return new Exercise
-                {
-                    Id = entry.ExerciseId,
-                    Name = entry.Name,
-                    RepetitionType = entry.RepetitionType,
-                    DefaultEquipment = defaultEquipment
-                };
-            });
-        }
-
-        private List<ExerciseEntry> CreateRandomExerciseEntries(string userId, List<EquipmentEntry> equipmentEntries)
-        {
-            var exerciseEntries = new List<ExerciseEntry>();
-            var entriesCount = _faker.Random.Int(1, 10);
-            for (var i = 0;  i < entriesCount; i++)
-            {
-                exerciseEntries.Add(new ExerciseEntry
-                {
-                    UserId = userId,
-                    ExerciseId = _faker.Random.Guid().ToString(),
-                    Name = _faker.Random.AlphaNumeric(10),
-                    RepetitionType = _faker.Random.Enum<RepetitionType>(),
-                    DefaultEquipmentId = _faker.Random.Bool(0.5f) ? null : _faker.PickRandom(equipmentEntries).EquipmentId,
-                });
-            }
-            return exerciseEntries;
         }
     }
 }

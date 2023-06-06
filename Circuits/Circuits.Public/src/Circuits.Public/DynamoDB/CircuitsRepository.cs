@@ -54,6 +54,7 @@ namespace Circuits.Public.DynamoDB
                 var exercise = await GetExerciseAsync(userId, entry.ExerciseId);
                 var item = new Item
                 {
+                    ItemId = entry.ItemId,
                     Index = entry.Index,
                     OccurrenceWeight = entry.OccurrenceWeight,
                     Exercise = exercise
