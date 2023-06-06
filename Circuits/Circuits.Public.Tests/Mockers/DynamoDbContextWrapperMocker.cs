@@ -12,13 +12,9 @@ namespace Circuits.Public.Tests.Mockers
                 .Returns(Task.CompletedTask);
         }
 
-        public void SimulateQueryAsync<T>(object hashKeyValue, QueryOperator queryOperator, object value, List<T> results) where T : class
+        public void SimulateQueryAsync<T>(object hashKeyValue, QueryOperator queryOperator, IEnumerable<object> values, List<T> results) where T : class
         {
-            Mock.Setup(mock => mock.QueryAsync<T>(hashKeyValue, queryOperator, It.IsAny<IEnumerable<object>>()))
-                .Callback<object, QueryOperator, IEnumerable<object>>((_, _, values) =>
-                {
-                    values.Should().BeEquivalentTo(new object[] { value });
-                })
+            Mock.Setup(mock => mock.QueryAsync<T>(hashKeyValue, queryOperator, values))
                 .Returns(Task.FromResult(results));
         }
     }

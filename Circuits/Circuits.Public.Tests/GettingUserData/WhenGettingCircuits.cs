@@ -22,7 +22,7 @@ namespace Circuits.Public.Tests.GettingUserData
             var circuitEntries = CrreateRandomCircuitEntries(userId);
 
             // GIVEN DynamoDB is simulated
-            _contextWrapperMocker.SimulateQueryAsync(userId, QueryOperator.BeginsWith, string.Empty, circuitEntries);
+            _contextWrapperMocker.SimulateQueryAsync(userId, QueryOperator.BeginsWith, new string[] { string.Empty }, circuitEntries);
 
             // WHEN geting equipment
             var circuitsController = TestHelper.BuildCircuitsController(_contextWrapperMocker);
