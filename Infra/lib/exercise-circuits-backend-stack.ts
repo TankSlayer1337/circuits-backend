@@ -46,7 +46,8 @@ export class ExerciseCircuitsBackendStack extends cdk.Stack {
     const userPool = new UserPool(this, `${projectName}-user-pool-${this.region}-${stage}`, {
       selfSignUpEnabled: true,
       userPoolName: `${projectName}-user-pool-${this.region}-${stage}`,
-      signInAliases: { username: true, email: true }
+      signInAliases: { username: true, email: true },
+      removalPolicy: cdk.RemovalPolicy.DESTROY
     });
 
     const googleProvider = new UserPoolIdentityProviderGoogle(this, 'Google', {
