@@ -16,7 +16,7 @@ export class ExerciseCircuitsBackendStack extends cdk.Stack {
     const projectName = props.envConfig.projectName;
     const stage = props.envConfig.stage;
 
-    var userPool = this.setupCognitoUserPool(projectName, stage);
+    const userPool = this.setupCognitoUserPool(projectName, stage);
 
     const table = new Table(this, `DynamoDBTable`, {
       tableName: `${projectName}-table-${this.region}-${stage}`,
