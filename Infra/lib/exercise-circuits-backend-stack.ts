@@ -75,7 +75,16 @@ export class ExerciseCircuitsBackendStack extends cdk.Stack {
           authorizationCodeGrant: true
         },
         callbackUrls: [
-          'https://REPLACE-ME'
+          'http://127.0.0.1:5173',
+          'https://dev.exercise-circuits.cloudchaotic.com',
+          'https://staging.exercise-circuits.cloudchaotic.com',
+          'https://www.exercise-circuits.cloudchaotic.com'
+        ],
+        logoutUrls: [
+          'http://127.0.0.1:5173',
+          'https://dev.exercise-circuits.cloudchaotic.com',
+          'https://staging.exercise-circuits.cloudchaotic.com',
+          'https://www.exercise-circuits.cloudchaotic.com'
         ],
         scopes: [OAuthScope.resourceServer(userDataServer, fullAccessScope)]
       }
