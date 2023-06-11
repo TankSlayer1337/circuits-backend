@@ -2,7 +2,7 @@ import * as cdk from 'aws-cdk-lib';
 import { AttributeType, BillingMode, Table } from 'aws-cdk-lib/aws-dynamodb';
 import { Construct } from 'constructs';
 import { EnvironmentConfiguration } from './environment-configurations';
-import { OAuthScope, ResourceServerScope, UserPool, UserPoolClientIdentityProvider, UserPoolIdentityProviderGoogle } from 'aws-cdk-lib/aws-cognito';
+import { AccountRecovery, OAuthScope, ResourceServerScope, UserPool, UserPoolClientIdentityProvider, UserPoolIdentityProviderGoogle } from 'aws-cdk-lib/aws-cognito';
 import { Code, Function, Runtime } from 'aws-cdk-lib/aws-lambda';
 
 interface ExerciseCircuitsBackendStackProps extends cdk.StackProps {
@@ -47,6 +47,10 @@ export class ExerciseCircuitsBackendStack extends cdk.Stack {
       selfSignUpEnabled: true,
       userPoolName: `${projectName}-user-pool-${this.region}-${stage}`,
       signInAliases: { username: true, email: true },
+      accountRecovery: AccountRecovery.EMAIL_ONLY,
+      standardAttributes: {
+        email: { required: true }
+      },
       removalPolicy: cdk.RemovalPolicy.DESTROY
     });
 
@@ -58,7 +62,7 @@ export class ExerciseCircuitsBackendStack extends cdk.Stack {
 
     const fullAccessScope = new ResourceServerScope({ scopeName: '*', scopeDescription: 'Full access' });
     const userDataServer = userPool.addResourceServer('ResourceServer', {
-      identifier: 'user-data',
+      identifier: 'https://dev.exercise-circuits.api.cloudchaotic.com',
       scopes: [fullAccessScope]
     });
 
