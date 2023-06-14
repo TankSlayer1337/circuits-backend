@@ -83,6 +83,7 @@ export class ExerciseCircuitsBackendStack extends cdk.Stack {
 
     const googleProvider = new UserPoolIdentityProviderGoogle(this, 'Google', {
       userPool: userPool,
+      // client ID and secret are replaced in the console.
       clientId: 'REPLACE-ME',
       clientSecret: 'REPLACE-ME'
     });
