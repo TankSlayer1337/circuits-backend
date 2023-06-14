@@ -16,7 +16,7 @@ export class ExerciseCircuitsBackendStack extends cdk.Stack {
     const projectName = props.envConfig.projectName;
     const stage = props.envConfig.stage;
 
-    const userPool = this.setupCognitoUserPool(projectName, stage);
+    const userPool = this.setupCognitoUserPool(projectName, props.envConfig);
 
     const table = new Table(this, `DynamoDBTable`, {
       tableName: `${projectName}-table-${this.region}-${stage}`,
@@ -42,7 +42,8 @@ export class ExerciseCircuitsBackendStack extends cdk.Stack {
     table.grantReadWriteData(lambdaFunction);
   }
 
-  private setupCognitoUserPool(projectName: string, stage: string): UserPool {
+  private setupCognitoUserPool(projectName: string, envConfig: EnvironmentConfiguration): UserPool {
+    const stage = envConfig.stage;
     const userPool = new UserPool(this, `${projectName}-user-pool-${this.region}-${stage}`, {
       selfSignUpEnabled: true,
       userPoolName: `${projectName}-user-pool-${this.region}-${stage}`,
@@ -53,16 +54,16 @@ export class ExerciseCircuitsBackendStack extends cdk.Stack {
       },
       removalPolicy: cdk.RemovalPolicy.DESTROY
     });
-
-    const googleProvider = new UserPoolIdentityProviderGoogle(this, 'Google', {
-      userPool: userPool,
-      clientId: 'REPLACE-ME',
-      clientSecret: 'REPLACE-ME'
+    userPool.addDomain('UserPoolDomain', {
+      cognitoDomain: {
+        domainPrefix: envConfig.cognitoHostedUiDomainPrefix
+      }
     });
 
     const fullAccessScope = new ResourceServerScope({ scopeName: '*', scopeDescription: 'Full access' });
     const userDataServer = userPool.addResourceServer('ResourceServer', {
-      identifier: 'https://dev.exercise-circuits.api.cloudchaotic.com',
+      userPoolResourceServerName: 'Exercise Circuits API',
+      identifier: `https://${stage}.exercise-circuits.api.cloudchaotic.com`,
       scopes: [fullAccessScope]
     });
 
@@ -74,20 +75,16 @@ export class ExerciseCircuitsBackendStack extends cdk.Stack {
         flows: {
           authorizationCodeGrant: true
         },
-        callbackUrls: [
-          'http://127.0.0.1:5173',
-          'https://dev.exercise-circuits.cloudchaotic.com',
-          'https://staging.exercise-circuits.cloudchaotic.com',
-          'https://www.exercise-circuits.cloudchaotic.com'
-        ],
-        logoutUrls: [
-          'http://127.0.0.1:5173',
-          'https://dev.exercise-circuits.cloudchaotic.com',
-          'https://staging.exercise-circuits.cloudchaotic.com',
-          'https://www.exercise-circuits.cloudchaotic.com'
-        ],
+        callbackUrls: envConfig.cognitoUrls,
+        logoutUrls: envConfig.cognitoUrls,
         scopes: [OAuthScope.resourceServer(userDataServer, fullAccessScope)]
       }
+    });
+
+    const googleProvider = new UserPoolIdentityProviderGoogle(this, 'Google', {
+      userPool: userPool,
+      clientId: 'REPLACE-ME',
+      clientSecret: 'REPLACE-ME'
     });
     client.node.addDependency(googleProvider);
 
