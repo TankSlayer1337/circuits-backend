@@ -4,17 +4,19 @@ export interface EnvironmentConfiguration {
   awsEnv: Environment,
   projectName: string,
   stage: string,
-  cognitoUrls: string[],
+  stageSubDomain: string,
+  origins: string[],
   cognitoHostedUiDomainPrefix: string
 }
 
-const stockholm: Environment = { region: 'eu-north-1' };
+const stockholm: Environment = { region: 'eu-north-1', account: process.env.CDK_DEFAULT_ACCOUNT };
 
 export const devConfiguration: EnvironmentConfiguration = {
   awsEnv: stockholm,
   projectName: 'exercise-circuits-backend',
   stage: 'dev',
-  cognitoUrls: [
+  stageSubDomain: 'dev.',
+  origins: [
     'http://localhost:5173',
     'https://dev.exercise-circuits.cloudchaotic.com'
   ],
