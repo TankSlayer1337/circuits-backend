@@ -2,7 +2,7 @@ import * as cdk from 'aws-cdk-lib';
 import { AttributeType, BillingMode, Table } from 'aws-cdk-lib/aws-dynamodb';
 import { Construct } from 'constructs';
 import { EnvironmentConfiguration } from './environment-configurations';
-import { AccountRecovery, OAuthScope, ResourceServerScope, UserPool, UserPoolClientIdentityProvider, UserPoolIdentityProviderGoogle } from 'aws-cdk-lib/aws-cognito';
+import { AccountRecovery, OAuthScope, ProviderAttribute, ResourceServerScope, UserPool, UserPoolClientIdentityProvider, UserPoolIdentityProviderGoogle } from 'aws-cdk-lib/aws-cognito';
 import { Code, Function, Runtime } from 'aws-cdk-lib/aws-lambda';
 
 interface ExerciseCircuitsBackendStackProps extends cdk.StackProps {
@@ -85,7 +85,11 @@ export class ExerciseCircuitsBackendStack extends cdk.Stack {
       userPool: userPool,
       // client ID and secret are replaced in the console.
       clientId: 'REPLACE-ME',
-      clientSecret: 'REPLACE-ME'
+      clientSecret: 'REPLACE-ME',
+      scopes: ['profile', 'email'],//, 'openid'],
+      attributeMapping: {
+        email: ProviderAttribute.GOOGLE_EMAIL
+      }
     });
     client.node.addDependency(googleProvider);
 
