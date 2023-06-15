@@ -15,7 +15,7 @@ export const devConfiguration: EnvironmentConfiguration = {
   projectName: 'exercise-circuits-backend',
   stage: 'dev',
   cognitoUrls: [
-    'http://localhost:5173/',
+    'http://localhost:5173',
     'https://dev.exercise-circuits.cloudchaotic.com'
   ],
   cognitoHostedUiDomainPrefix: 'exercise-circuits-dev'
