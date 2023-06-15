@@ -77,7 +77,11 @@ export class ExerciseCircuitsBackendStack extends cdk.Stack {
         },
         callbackUrls: envConfig.cognitoUrls,
         logoutUrls: envConfig.cognitoUrls,
-        scopes: [OAuthScope.resourceServer(userDataServer, fullAccessScope)]
+        scopes: [
+          OAuthScope.resourceServer(userDataServer, fullAccessScope),
+          OAuthScope.PROFILE,
+          OAuthScope.EMAIL
+        ]
       }
     });
 
