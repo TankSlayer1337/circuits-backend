@@ -90,7 +90,7 @@ export class ExerciseCircuitsBackendStack extends cdk.Stack {
       // client ID and secret are replaced in the console.
       clientId: 'REPLACE-ME',
       clientSecret: 'REPLACE-ME',
-      scopes: ['profile', 'email'],//, 'openid'],
+      scopes: ['profile', 'email'],
       attributeMapping: {
         email: ProviderAttribute.GOOGLE_EMAIL
       }
