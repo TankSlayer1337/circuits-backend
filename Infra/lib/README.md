@@ -1,0 +1,2 @@
+# OAuth client ID and secrets
+When registering an app with e.g. Google, Google provides a Client ID and a Client secret in the console. These have to be added to the identity provider in Cognito in order for a user to log in using Google. Typically, we want to do everything by infrastructure as code and avoid having manual steps, but in this case it is more secure and easy to add the client id and secret through the AWS console.

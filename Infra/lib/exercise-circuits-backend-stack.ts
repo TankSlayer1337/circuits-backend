@@ -2,7 +2,7 @@ import * as cdk from 'aws-cdk-lib';
 import { AttributeType, BillingMode, Table } from 'aws-cdk-lib/aws-dynamodb';
 import { Construct } from 'constructs';
 import { EnvironmentConfiguration } from './environment-configurations';
-import { OAuthScope, ResourceServerScope, UserPool, UserPoolClientIdentityProvider, UserPoolIdentityProviderGoogle } from 'aws-cdk-lib/aws-cognito';
+import { AccountRecovery, OAuthScope, ProviderAttribute, ResourceServerScope, UserPool, UserPoolClientIdentityProvider, UserPoolIdentityProviderGoogle } from 'aws-cdk-lib/aws-cognito';
 import { Code, Function, Runtime } from 'aws-cdk-lib/aws-lambda';
 
 interface ExerciseCircuitsBackendStackProps extends cdk.StackProps {
@@ -16,7 +16,7 @@ export class ExerciseCircuitsBackendStack extends cdk.Stack {
     const projectName = props.envConfig.projectName;
     const stage = props.envConfig.stage;
 
-    var userPool = this.setupCognitoUserPool(projectName, stage);
+    const userPool = this.setupCognitoUserPool(projectName, props.envConfig);
 
     const table = new Table(this, `DynamoDBTable`, {
       tableName: `${projectName}-table-${this.region}-${stage}`,
@@ -42,23 +42,28 @@ export class ExerciseCircuitsBackendStack extends cdk.Stack {
     table.grantReadWriteData(lambdaFunction);
   }
 
-  private setupCognitoUserPool(projectName: string, stage: string): UserPool {
+  private setupCognitoUserPool(projectName: string, envConfig: EnvironmentConfiguration): UserPool {
+    const stage = envConfig.stage;
     const userPool = new UserPool(this, `${projectName}-user-pool-${this.region}-${stage}`, {
       selfSignUpEnabled: true,
       userPoolName: `${projectName}-user-pool-${this.region}-${stage}`,
       signInAliases: { username: true, email: true },
+      accountRecovery: AccountRecovery.EMAIL_ONLY,
+      standardAttributes: {
+        email: { required: true }
+      },
       removalPolicy: cdk.RemovalPolicy.DESTROY
     });
-
-    const googleProvider = new UserPoolIdentityProviderGoogle(this, 'Google', {
-      userPool: userPool,
-      clientId: 'REPLACE-ME',
-      clientSecret: 'REPLACE-ME'
+    userPool.addDomain('UserPoolDomain', {
+      cognitoDomain: {
+        domainPrefix: envConfig.cognitoHostedUiDomainPrefix
+      }
     });
 
     const fullAccessScope = new ResourceServerScope({ scopeName: '*', scopeDescription: 'Full access' });
     const userDataServer = userPool.addResourceServer('ResourceServer', {
-      identifier: 'user-data',
+      userPoolResourceServerName: 'Exercise Circuits API',
+      identifier: `https://${stage}.exercise-circuits.api.cloudchaotic.com`,
       scopes: [fullAccessScope]
     });
 
@@ -70,10 +75,24 @@ export class ExerciseCircuitsBackendStack extends cdk.Stack {
         flows: {
           authorizationCodeGrant: true
         },
-        callbackUrls: [
-          'https://REPLACE-ME'
-        ],
-        scopes: [OAuthScope.resourceServer(userDataServer, fullAccessScope)]
+        callbackUrls: envConfig.cognitoUrls,
+        logoutUrls: envConfig.cognitoUrls,
+        scopes: [
+          OAuthScope.resourceServer(userDataServer, fullAccessScope),
+          OAuthScope.PROFILE,
+          OAuthScope.EMAIL
+        ]
+      }
+    });
+
+    const googleProvider = new UserPoolIdentityProviderGoogle(this, 'Google', {
+      userPool: userPool,
+      // client ID and secret are replaced in the console.
+      clientId: 'REPLACE-ME',
+      clientSecret: 'REPLACE-ME',
+      scopes: ['profile', 'email'],
+      attributeMapping: {
+        email: ProviderAttribute.GOOGLE_EMAIL
       }
     });
     client.node.addDependency(googleProvider);
