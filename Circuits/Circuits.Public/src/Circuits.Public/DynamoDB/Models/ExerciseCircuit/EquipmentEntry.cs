@@ -18,11 +18,11 @@ namespace Circuits.Public.DynamoDB.Models.ExerciseCircuit
         [DynamoDBProperty("CanBeUsedInMultiples")]
         public bool CanBeUsedInMultiples { get; init; }
 
-        public static EquipmentEntry FromRequest(AddEquipmentRequest request)
+        public static EquipmentEntry FromRequest(string userId, AddEquipmentRequest request)
         {
             return new EquipmentEntry
             {
-                UserId = request.UserId,
+                UserId = userId,
                 EquipmentId = Guid.NewGuid().ToString(),
                 Name = request.Name,
                 CanBeUsedInMultiples = request.CanBeUsedInMultiples

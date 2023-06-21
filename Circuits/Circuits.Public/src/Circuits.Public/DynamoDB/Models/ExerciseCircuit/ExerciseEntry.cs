@@ -22,11 +22,11 @@ namespace Circuits.Public.DynamoDB.Models.ExerciseCircuit
         [DynamoDBProperty(AttributeNames.ID1, typeof(EquipmentIdConverter))]
         public string? DefaultEquipmentId { get; init; } = string.Empty;
 
-        public static ExerciseEntry FromRequest(AddExerciseRequest request)
+        public static ExerciseEntry FromRequest(string userId, AddExerciseRequest request)
         {
             return new ExerciseEntry
             {
-                UserId = request.UserId,
+                UserId = userId,
                 ExerciseId = Guid.NewGuid().ToString(),
                 Name = request.Name,
                 RepetitionType = request.RepetitionType,

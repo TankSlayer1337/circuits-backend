@@ -1,5 +1,7 @@
 using Amazon.DynamoDBv2;
 using Circuits.Public.DynamoDB;
+using Circuits.Public.UserInfo;
+using Circuits.Public.Utilities;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +15,9 @@ builder.Services.AddAWSLambdaHosting(LambdaEventSource.RestApi);
 builder.Services.AddTransient<CircuitsRepository>();
 builder.Services.AddScoped<IDynamoDbContextWrapper, DynamoDbContextWrapper>();
 builder.Services.AddScoped<AmazonDynamoDBClient>();
+builder.Services.AddHttpClient();
+builder.Services.AddTransient<IEnvironmentVariableGetter, EnvironmentVariableGetter>();
+builder.Services.AddTransient<IUserInfoGetter, UserInfoGetter>();
 
 var app = builder.Build();
 
