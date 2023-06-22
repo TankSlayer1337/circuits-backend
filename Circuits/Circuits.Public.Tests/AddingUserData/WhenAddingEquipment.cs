@@ -1,47 +1,51 @@
 ﻿using Circuits.Public.Controllers.Models.AddRequests;
 using Circuits.Public.DynamoDB.Models.ExerciseCircuit;
-using Circuits.Public.Tests.Mockers;
+using Circuits.Public.Tests.Utils;
 
 namespace Circuits.Public.Tests.AddingUserData
 {
-    public class WhenAddingEquipment
+    public class WhenAddingEquipment : CircuitsRepositoryTestBase
     {
-        private readonly Faker _faker = new();
-        private readonly DynamoDbContextWrapperMocker _contextWrapperMocker = new();
-
         [Fact]
         public async Task WithValidRequestAsync()
         {
             // GIVEN a valid request
-            var request = new AddEquipmentRequest
-            {
-                UserId = _faker.Random.Guid().ToString(),
-                Name = _faker.Random.AlphaNumeric(10),
-                CanBeUsedInMultiples = _faker.Random.Bool()
-            };
+            AddEquipmentRequest addEquipmentRequest = BuildAddEquipmentRequest();
+
+            // GIVEN UserInfo endpoint is simulated
+            var (userId, authorizationHeader) = UserInfoEndpointSimulator.SimulateUserInfoEndpoint(_httpClientWrapperMocker, _environmentVariableGetterMocker);
 
             // GIVEN DynamoDB is simulated
             EquipmentEntry? savedEntry = null;
             _contextWrapperMocker.SimulateSaveAsync<EquipmentEntry>(item => savedEntry = item);
 
             // WHEN adding circuit
-            var circuitsController = TestHelper.BuildCircuitsController(_contextWrapperMocker);
-            var result = await circuitsController.AddEquipment(request);
+            var circuitsRepository = BuildCircuitsRepository();
+            var result = await circuitsRepository.AddEquipmentAsync(authorizationHeader, addEquipmentRequest);
 
             // THEN the response should be the GUID of the new equipment
-            result.Value.Should().Be(savedEntry?.EquipmentId);
-            Guid.TryParse(result.Value, out _).Should().BeTrue();
+            result.Should().Be(savedEntry?.EquipmentId);
+            Guid.TryParse(result, out _).Should().BeTrue();
 
             // THEN the equipment should be saved to DynamoDB
             _contextWrapperMocker.Mock.Verify(mock => mock.SaveAsync(It.IsAny<EquipmentEntry>()), Times.Once);
             var expectedEntry = new EquipmentEntry
             {
-                UserId = request.UserId,
-                EquipmentId = result.Value,
-                Name = request.Name,
-                CanBeUsedInMultiples = request.CanBeUsedInMultiples
+                UserId = userId,
+                EquipmentId = result,
+                Name = addEquipmentRequest.Name,
+                CanBeUsedInMultiples = addEquipmentRequest.CanBeUsedInMultiples
             };
             savedEntry.Should().BeEquivalentTo(expectedEntry);
+        }
+
+        private AddEquipmentRequest BuildAddEquipmentRequest()
+        {
+            return new AddEquipmentRequest
+            {
+                Name = _faker.Random.AlphaNumeric(10),
+                CanBeUsedInMultiples = _faker.Random.Bool()
+            };
         }
     }
 }

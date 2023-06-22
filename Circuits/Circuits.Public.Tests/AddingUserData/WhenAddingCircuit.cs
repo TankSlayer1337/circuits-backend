@@ -1,45 +1,40 @@
-﻿using Circuits.Public.Controllers.Models.AddRequests;
-using Circuits.Public.DynamoDB.Models.ExerciseCircuit;
-using Circuits.Public.Tests.Mockers;
+﻿using Circuits.Public.DynamoDB.Models.ExerciseCircuit;
+using Circuits.Public.Tests.Utils;
 
 namespace Circuits.Public.Tests.AddingUserData
 {
-    public class WhenAddingCircuit
+    public class WhenAddingCircuit : CircuitsRepositoryTestBase
     {
-        private readonly Faker _faker = new();
-        private readonly DynamoDbContextWrapperMocker _contextWrapperMocker = new();
-
         [Fact]
         public async Task WithValidRequestAsync()
         {
-            // GIVEN a valid request
-            var request = new AddCircuitRequest
-            {
-                UserId = _faker.Random.Guid().ToString(),
-                Name = _faker.Random.AlphaNumeric(10)
-            };
+            // GIVEN UserInfo endpoint is simulated
+            var (userId, authorizationHeader) = UserInfoEndpointSimulator.SimulateUserInfoEndpoint(_httpClientWrapperMocker, _environmentVariableGetterMocker);
+
+            // GIVEN a valid circuit name
+            var name = _faker.Random.AlphaNumeric(10);
 
             // GIVEN DynamoDB is simulated
             CircuitEntry? savedEntry = null;
             _contextWrapperMocker.SimulateSaveAsync<CircuitEntry>(item => savedEntry = item);
 
             // WHEN adding circuit
-            var circuitsController = TestHelper.BuildCircuitsController(_contextWrapperMocker);
-            var result = await circuitsController.AddCircuit(request);
+            var circuitsRepository = BuildCircuitsRepository();
+            var result = await circuitsRepository.AddCircuitAsync(authorizationHeader, name);
 
             // THEN the circuit should be saved to DynamoDB
             _contextWrapperMocker.Mock.Verify(mock => mock.SaveAsync(It.IsAny<CircuitEntry>()), Times.Once);
             var expectedEntry = new CircuitEntry
             {
-                UserId = request.UserId,
-                CircuitId = result.Value,
-                Name = request.Name
+                UserId = userId,
+                CircuitId = result,
+                Name = name
             };
             savedEntry.Should().BeEquivalentTo(expectedEntry);
 
             // THEN the response should be the GUID of the new circuit
-            result.Value.Should().Be(savedEntry?.CircuitId);
-            Guid.TryParse(result.Value, out _).Should().BeTrue();
+            result.Should().Be(savedEntry?.CircuitId);
+            Guid.TryParse(result, out _).Should().BeTrue();
         }
     }
 }

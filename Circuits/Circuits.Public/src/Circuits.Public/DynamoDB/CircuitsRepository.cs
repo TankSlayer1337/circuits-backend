@@ -2,27 +2,33 @@
 using Circuits.Public.Controllers.Models.AddRequests;
 using Circuits.Public.DynamoDB.Models.ExerciseCircuit;
 using Circuits.Public.PresentationModels.CircuitDefinitionModels;
+using Circuits.Public.UserInfo;
 
 namespace Circuits.Public.DynamoDB
 {
+    // TODO: replace usage with interface
     public class CircuitsRepository
     {
         private readonly IDynamoDbContextWrapper _dynamoDbContext;
+        private readonly IUserInfoGetter _userInfoGetter;
 
-        public CircuitsRepository(IDynamoDbContextWrapper dynamoDbContext)
+        public CircuitsRepository(IDynamoDbContextWrapper dynamoDbContext, IUserInfoGetter userInfoGetter)
         {
             _dynamoDbContext = dynamoDbContext;
+            _userInfoGetter = userInfoGetter;
         }
 
-        public async Task<string> AddCircuitAsync(string userId, string name)
+        public async Task<string> AddCircuitAsync(string authorizationHeader, string name)
         {
+            var userId = await _userInfoGetter.GetUserIdAsync(authorizationHeader);
             var circuitEntry = CircuitEntry.Create(userId, name);
             await _dynamoDbContext.SaveAsync(circuitEntry);
             return circuitEntry.CircuitId;
         }
 
-        public async Task<List<Circuit>> GetCircuitsAsync(string userId)
+        public async Task<List<Circuit>> GetCircuitsAsync(string authorizationHeader)
         {
+            var userId = await _userInfoGetter.GetUserIdAsync(authorizationHeader);
             var circuitEntries = await QueryWithEmptyBeginsWith<CircuitEntry>(userId);
             var circuits = circuitEntries.Select(entry => new Circuit
             {
@@ -32,16 +38,18 @@ namespace Circuits.Public.DynamoDB
             return circuits.ToList();
         }
 
-        public async Task<string> AddItemAsync(AddItemRequest request)
+        public async Task<string> AddItemAsync(string authorizationHeader, AddItemRequest addItemRequest)
         {
             // TODO: validate the request, e.g. does the ExerciseId exist?
-            var itemEntry = ItemEntry.FromRequest(request);
+            var userId = await _userInfoGetter.GetUserIdAsync(authorizationHeader);
+            var itemEntry = ItemEntry.FromRequest(userId, addItemRequest);
             await _dynamoDbContext.SaveAsync(itemEntry);
             return itemEntry.ItemId;
         }
 
-        public async Task<List<Item>> GetItemsAsync(string userId, string circuitId)
+        public async Task<List<Item>> GetItemsAsync(string authorizationHeader, string circuitId)
         {
+            var userId = await _userInfoGetter.GetUserIdAsync(authorizationHeader);
             var pointer = new CircuitItemPointer
             {
                 UserId = userId,
@@ -65,15 +73,17 @@ namespace Circuits.Public.DynamoDB
             return sortedItems;
         }
 
-        public async Task<string> AddExerciseAsync(AddExerciseRequest request)
+        public async Task<string> AddExerciseAsync(string authorizationHeader, AddExerciseRequest addExerciseRequest)
         {
-            var exerciseEntry = ExerciseEntry.FromRequest(request);
+            var userId = await _userInfoGetter.GetUserIdAsync(authorizationHeader);
+            var exerciseEntry = ExerciseEntry.FromRequest(userId, addExerciseRequest);
             await _dynamoDbContext.SaveAsync(exerciseEntry);
             return exerciseEntry.ExerciseId;
         }
 
-        public async Task<List<Exercise>> GetExercisesAsync(string userId)
+        public async Task<List<Exercise>> GetExercisesAsync(string authorizationHeader)
         {
+            var userId = await _userInfoGetter.GetUserIdAsync(authorizationHeader);
             var exerciseEntries = await QueryWithEmptyBeginsWith<ExerciseEntry>(userId);
             var exercises = new List<Exercise>();
             foreach (var entry in exerciseEntries)
@@ -105,15 +115,17 @@ namespace Circuits.Public.DynamoDB
             };
         }
 
-        public async Task<string> AddEquipmentAsync(AddEquipmentRequest request)
+        public async Task<string> AddEquipmentAsync(string authorizationHeader, AddEquipmentRequest addEquipmentRequest)
         {
-            var equipmentEntry = EquipmentEntry.FromRequest(request);
+            var userId = await _userInfoGetter.GetUserIdAsync(authorizationHeader);
+            var equipmentEntry = EquipmentEntry.FromRequest(userId, addEquipmentRequest);
             await _dynamoDbContext.SaveAsync(equipmentEntry);
             return equipmentEntry.EquipmentId;
         }
 
-        public async Task<List<Equipment>> GetEquipmentAsync(string userId)
+        public async Task<List<Equipment>> GetEquipmentAsync(string authorizationHeader)
         {
+            var userId = await _userInfoGetter.GetUserIdAsync(authorizationHeader);
             var equipmentEntries = await QueryWithEmptyBeginsWith<EquipmentEntry>(userId);
             var equipment = equipmentEntries.Select(entry => new Equipment
             {

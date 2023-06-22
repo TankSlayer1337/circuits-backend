@@ -5,7 +5,8 @@
       "launchBrowser": true,
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "TABLE_NAME": "exercise-circuits-backend-table-eu-north-1-dev"
+        "TABLE_NAME": "exercise-circuits-backend-table-eu-north-1-dev",
+        "USERINFO_ENDPOINT_URL": "https://exercise-circuits-dev.auth.eu-north-1.amazoncognito.com/oauth2/userInfo"
       },
       "applicationUrl": "https://localhost:61805;http://localhost:61806"
     }

@@ -1,23 +1,21 @@
 ﻿using Amazon.DynamoDBv2.DocumentModel;
-using Circuits.Public.Controllers.Models.GetRequests;
 using Circuits.Public.DynamoDB.Models.ExerciseCircuit;
 using Circuits.Public.PresentationModels.CircuitDefinitionModels;
 using Circuits.Public.Tests.AddingUserData;
-using Circuits.Public.Tests.Mockers;
+using Circuits.Public.Tests.Utils;
 
 namespace Circuits.Public.Tests.GettingUserData
 {
-    public class WhenGettingItems
+    public class WhenGettingItems : CircuitsRepositoryTestBase
     {
-        private readonly Faker _faker = new();
-        private readonly DynamoDbContextWrapperMocker _contextWrapperMocker = new();
-
         [Fact]
         public async void WithSuccess()
         {
-            // GIVEN a UserId and CircuitId
-            var userId = _faker.Random.Guid().ToString();
+            // GIVEN a CircuitId
             var circuitId = _faker.Random.Guid().ToString();
+
+            // GIVEN UserInfo endpoint is simulated
+            var (userId, authorizationHeader) = UserInfoEndpointSimulator.SimulateUserInfoEndpoint(_httpClientWrapperMocker, _environmentVariableGetterMocker);
 
             // GIVEN user has equipment entries
             var equipmentEntries = RandomCreator.CreateEquipmentEntries(userId);
@@ -41,12 +39,12 @@ namespace Circuits.Public.Tests.GettingUserData
             }
 
             // WHEN getting items
-            var circuitsController = TestHelper.BuildCircuitsController(_contextWrapperMocker);
-            var results = await circuitsController.GetCircuitItems(new GetItemsRequest { UserId = userId, CircuitId = circuitId });
+            var circuitsRepository = BuildCircuitsRepository();
+            var results = await circuitsRepository.GetItemsAsync(authorizationHeader, circuitId);
 
             // THEN the correct item representations are returned
             IEnumerable<Item> expectedResults = CreateItems(itemEntries, exerciseEntries, equipmentEntries);
-            results.Value.Should().BeEquivalentTo(expectedResults);
+            results.Should().BeEquivalentTo(expectedResults);
         }
 
         private IEnumerable<Item> CreateItems(List<ItemEntry> itemEntries, List<ExerciseEntry> exerciseEntries, List<EquipmentEntry> equipmentEntries)

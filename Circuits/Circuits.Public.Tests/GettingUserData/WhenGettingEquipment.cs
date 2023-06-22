@@ -1,21 +1,17 @@
 ﻿using Amazon.DynamoDBv2.DocumentModel;
-using Circuits.Public.Controllers.Models.GetRequests;
 using Circuits.Public.PresentationModels.CircuitDefinitionModels;
 using Circuits.Public.Tests.AddingUserData;
-using Circuits.Public.Tests.Mockers;
+using Circuits.Public.Tests.Utils;
 
 namespace Circuits.Public.Tests.GettingUserData
 {
-    public class WhenGettingEquipment
+    public class WhenGettingEquipment : CircuitsRepositoryTestBase
     {
-        private readonly Faker _faker = new();
-        private readonly DynamoDbContextWrapperMocker _contextWrapperMocker = new();
-        
         [Fact]
         public async void WithSuccess()
         {
-            // GIVEN a UserId
-            var userId = _faker.Random.Guid().ToString();
+            // GIVEN UserInfo endpoint is simulated
+            var (userId, authorizationHeader) = UserInfoEndpointSimulator.SimulateUserInfoEndpoint(_httpClientWrapperMocker, _environmentVariableGetterMocker);
 
             // GIVEN user has equipment entries
             var equipmentEntries = RandomCreator.CreateEquipmentEntries(userId);
@@ -24,8 +20,8 @@ namespace Circuits.Public.Tests.GettingUserData
             _contextWrapperMocker.SimulateQueryAsync(userId, QueryOperator.BeginsWith, new string[] { string.Empty }, equipmentEntries);
 
             // WHEN getting equipment
-            var circuitsController = TestHelper.BuildCircuitsController(_contextWrapperMocker);
-            var results = await circuitsController.GetEquipment(new GetAllRequest { UserId = userId });
+            var circuitsRepository = BuildCircuitsRepository();
+            var results = await circuitsRepository.GetEquipmentAsync(authorizationHeader);
 
             // THEN the correct equipment representations are returned
             var expectedResults = equipmentEntries.Select(entry => new Equipment
@@ -34,7 +30,7 @@ namespace Circuits.Public.Tests.GettingUserData
                 Name = entry.Name,
                 CanBeUsedInMultiples = entry.CanBeUsedInMultiples
             });
-            results.Value.Should().BeEquivalentTo(expectedResults);
+            results.Should().BeEquivalentTo(expectedResults);
         }
     }
 }

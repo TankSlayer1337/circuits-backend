@@ -22,11 +22,11 @@ namespace Circuits.Public.DynamoDB.Models.ExerciseCircuit
         [DynamoDBProperty("OccurrenceWeight")]
         public uint OccurrenceWeight { get; init; }
 
-        public static ItemEntry FromRequest(AddItemRequest request)
+        public static ItemEntry FromRequest(string userId, AddItemRequest request)
         {
             var pointer = new CircuitItemPointer
             {
-                UserId = request.UserId,
+                UserId = userId,
                 CircuitId = request.CircuitId
             };
             return new ItemEntry

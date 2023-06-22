@@ -40,7 +40,8 @@ export class ExerciseCircuitsBackendStack extends cdk.Stack {
       memorySize: 256,
       reservedConcurrentExecutions: 2,
       environment: {
-        'TABLE_NAME': table.tableName 
+        'TABLE_NAME': table.tableName,
+        'USERINFO_ENDPOINT_URL': `https://${envConfig.cognitoHostedUiDomainPrefix}.auth.${this.region}.amazoncognito.com/oauth2/userInfo`
       }
     });
     table.grantReadWriteData(lambdaFunction);
