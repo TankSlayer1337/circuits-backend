@@ -21,62 +21,57 @@ namespace Circuits.Public.Controllers
         [HttpPost(Equipment)]
         public async Task<ActionResult<string>> AddEquipment([FromBody] AddEquipmentRequest request)
         {
-            var authorizationHeader = GetAuthorizationHeader(Request);
+            var authorizationHeader = Utils.GetAuthorizationHeader(Request);
             return await _circuitsRepository.AddEquipmentAsync(authorizationHeader, request);
         }
 
         [HttpGet(Equipment)]
         public async Task<ActionResult<List<Equipment>>> GetEquipment()
         {
-            var authorizationHeader = GetAuthorizationHeader(Request);
+            var authorizationHeader = Utils.GetAuthorizationHeader(Request);
             return await _circuitsRepository.GetEquipmentAsync(authorizationHeader);
         }
         
         [HttpPost(Exercises)]
         public async Task<ActionResult<string>> AddExercise([FromBody] AddExerciseRequest request)
         {
-            var authorizationHeader = GetAuthorizationHeader(Request);
+            var authorizationHeader = Utils.GetAuthorizationHeader(Request);
             return await _circuitsRepository.AddExerciseAsync(authorizationHeader, request);
         }
 
         [HttpGet(Exercises)]
         public async Task<ActionResult<List<Exercise>>> GetExercises()
         {
-            var authorizationHeader = GetAuthorizationHeader(Request);
+            var authorizationHeader = Utils.GetAuthorizationHeader(Request);
             return await _circuitsRepository.GetExercisesAsync(authorizationHeader);
         }
 
         [HttpPost(Circuits)]
         public async Task<ActionResult<string>> AddCircuit([FromBody] AddCircuitRequest request)
         {
-            var authorizationHeader = GetAuthorizationHeader(Request);
+            var authorizationHeader = Utils.GetAuthorizationHeader(Request);
             return await _circuitsRepository.AddCircuitAsync(authorizationHeader, request.Name);
         }
 
         [HttpGet(Circuits)]
         public async Task<ActionResult<List<Circuit>>> GetCircuits()
         {
-            var authorizationHeader = GetAuthorizationHeader(Request);
+            var authorizationHeader = Utils.GetAuthorizationHeader(Request);
             return await _circuitsRepository.GetCircuitsAsync(authorizationHeader);
         }
 
         [HttpPost(Items)]
         public async Task<ActionResult<string>> AddCircuitItem([FromBody] AddItemRequest request)
         {
-            var authorizationHeader = GetAuthorizationHeader(Request);
+            var authorizationHeader = Utils.GetAuthorizationHeader(Request);
             return await _circuitsRepository.AddItemAsync(authorizationHeader, request);
         }
 
         [HttpGet(Items)]
         public async Task<ActionResult<List<Item>>> GetCircuitItems([FromQuery] string circuitId)
         {
-            var authorizationHeader = GetAuthorizationHeader(Request);
+            var authorizationHeader = Utils.GetAuthorizationHeader(Request);
             return await _circuitsRepository.GetItemsAsync(authorizationHeader, circuitId);
-        }
-
-        private string GetAuthorizationHeader(HttpRequest request)
-        {
-            return Request.Headers["Authorization"].First();
         }
     }
 }
