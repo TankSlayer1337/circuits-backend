@@ -1,4 +1,4 @@
-﻿namespace Circuits.Public.DynamoDB.Models.ExerciseCircuit
+﻿namespace Circuits.Public.DynamoDB.Models.CircuitDefinition
 {
     public class CircuitItemPointer
     {

@@ -1,7 +1,7 @@
 ﻿using Amazon.DynamoDBv2.DataModel;
 using Circuits.Public.DynamoDB.PropertyConverters;
 
-namespace Circuits.Public.DynamoDB.Models.ExerciseCircuit
+namespace Circuits.Public.DynamoDB.Models.CircuitDefinition
 {
     public class CircuitEntry
     {

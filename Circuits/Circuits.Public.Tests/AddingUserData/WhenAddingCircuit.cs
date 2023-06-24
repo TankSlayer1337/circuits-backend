@@ -1,4 +1,4 @@
-﻿using Circuits.Public.DynamoDB.Models.ExerciseCircuit;
+﻿using Circuits.Public.DynamoDB.Models.CircuitDefinition;
 using Circuits.Public.Tests.Utils;
 
 namespace Circuits.Public.Tests.AddingUserData
