@@ -1,6 +1,6 @@
 ﻿using Amazon.DynamoDBv2.DocumentModel;
 using Circuits.Public.Controllers.Models.AddRequests;
-using Circuits.Public.DynamoDB.Models.ExerciseCircuit;
+using Circuits.Public.DynamoDB.Models.CircuitDefinition;
 using Circuits.Public.PresentationModels.CircuitDefinitionModels;
 using Circuits.Public.UserInfo;
 

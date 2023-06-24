@@ -1,4 +1,4 @@
-﻿using Circuits.Public.DynamoDB.Models.ExerciseCircuit;
+﻿using Circuits.Public.DynamoDB.Models.CircuitDefinition;
 
 namespace Circuits.Public.DynamoDB.PropertyConverters.MultipleProperties
 {

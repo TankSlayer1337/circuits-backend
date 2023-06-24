@@ -1,10 +1,9 @@
 ﻿using Amazon.DynamoDBv2.DocumentModel;
-using Circuits.Public.DynamoDB.Models.ExerciseCircuit;
+using Circuits.Public.DynamoDB.Models.CircuitDefinition;
 using Circuits.Public.PresentationModels.CircuitDefinitionModels;
-using Circuits.Public.Tests.AddingUserData;
 using Circuits.Public.Tests.Utils;
 
-namespace Circuits.Public.Tests.GettingUserData
+namespace Circuits.Public.Tests.CircuitDefinition.GettingUserData
 {
     public class WhenGettingExercises : CircuitsRepositoryTestBase
     {
@@ -21,7 +20,7 @@ namespace Circuits.Public.Tests.GettingUserData
             var exerciseEntries = RandomCreator.CreateExerciseEntries(userId, equipmentEntries);
 
             // GIVEN DynamoDB is simulated
-            foreach(var entry in equipmentEntries)
+            foreach (var entry in equipmentEntries)
             {
                 _contextWrapperMocker.SimulateQueryAsync(userId, QueryOperator.Equal, new string[] { entry.EquipmentId }, new List<EquipmentEntry> { entry });
             }

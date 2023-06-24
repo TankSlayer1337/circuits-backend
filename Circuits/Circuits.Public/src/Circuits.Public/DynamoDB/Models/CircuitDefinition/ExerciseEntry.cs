@@ -3,7 +3,7 @@ using Circuits.Public.Controllers.Models.AddRequests;
 using Circuits.Public.DynamoDB.PropertyConverters;
 using Circuits.Public.PresentationModels.CircuitDefinitionModels;
 
-namespace Circuits.Public.DynamoDB.Models.ExerciseCircuit
+namespace Circuits.Public.DynamoDB.Models.CircuitDefinition
 {
     public class ExerciseEntry
     {

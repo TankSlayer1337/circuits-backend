@@ -1,10 +1,9 @@
 ﻿using Amazon.DynamoDBv2.DocumentModel;
-using Circuits.Public.DynamoDB.Models.ExerciseCircuit;
+using Circuits.Public.DynamoDB.Models.CircuitDefinition;
 using Circuits.Public.PresentationModels.CircuitDefinitionModels;
-using Circuits.Public.Tests.AddingUserData;
 using Circuits.Public.Tests.Utils;
 
-namespace Circuits.Public.Tests.GettingUserData
+namespace Circuits.Public.Tests.CircuitDefinition.GettingUserData
 {
     public class WhenGettingCircuits : CircuitsRepositoryTestBase
     {

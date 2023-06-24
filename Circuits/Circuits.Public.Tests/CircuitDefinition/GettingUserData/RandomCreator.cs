@@ -1,7 +1,7 @@
-﻿using Circuits.Public.DynamoDB.Models.ExerciseCircuit;
+﻿using Circuits.Public.DynamoDB.Models.CircuitDefinition;
 using Circuits.Public.PresentationModels.CircuitDefinitionModels;
 
-namespace Circuits.Public.Tests.GettingUserData
+namespace Circuits.Public.Tests.CircuitDefinition.GettingUserData
 {
     internal class RandomCreator
     {
