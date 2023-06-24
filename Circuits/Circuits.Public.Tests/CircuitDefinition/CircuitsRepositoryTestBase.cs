@@ -3,7 +3,7 @@ using Circuits.Public.Tests.Mockers;
 using Circuits.Public.UserInfo;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Circuits.Public.Tests.CircuitDefinition.AddingUserData
+namespace Circuits.Public.Tests.CircuitDefinition
 {
     public class CircuitsRepositoryTestBase
     {
