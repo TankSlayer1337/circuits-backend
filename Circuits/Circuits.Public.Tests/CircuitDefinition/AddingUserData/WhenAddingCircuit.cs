@@ -1,7 +1,7 @@
 ﻿using Circuits.Public.DynamoDB.Models.CircuitDefinition;
 using Circuits.Public.Tests.Utils;
 
-namespace Circuits.Public.Tests.AddingUserData
+namespace Circuits.Public.Tests.CircuitDefinition.AddingUserData
 {
     public class WhenAddingCircuit : CircuitsRepositoryTestBase
     {
