@@ -20,9 +20,16 @@ builder.Services.AddHttpClient();
 builder.Services.AddScoped<IHttpClientWrapper, HttpClientWrapper>();
 builder.Services.AddTransient<IEnvironmentVariableGetter, EnvironmentVariableGetter>();
 builder.Services.AddTransient<IUserInfoGetter, UserInfoGetter>();
+// Swagger: https://learn.microsoft.com/en-us/aspnet/core/tutorials/getting-started-with-swashbuckle?view=aspnetcore-7.0&tabs=visual-studio
+builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
 
 app.UseHttpsRedirection();
 app.UseAuthorization();

@@ -14,5 +14,6 @@
     <PackageReference Include="Amazon.Lambda.AspNetCoreServer.Hosting" Version="1.5.1" />
     <PackageReference Include="AWSSDK.DynamoDBv2" Version="3.7.103.12" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
   </ItemGroup>
 </Project>
