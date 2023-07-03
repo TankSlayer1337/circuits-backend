@@ -67,8 +67,8 @@ namespace Circuits.Public.Controllers
             return await _circuitsRepository.AddItemAsync(authorizationHeader, request);
         }
 
-        [HttpGet(Items)]
-        public async Task<ActionResult<List<Item>>> GetCircuitItems([FromQuery] string circuitId)
+        [HttpGet("items/{circuitId}")]
+        public async Task<ActionResult<List<Item>>> GetCircuitItems(string circuitId)
         {
             var authorizationHeader = Utils.GetAuthorizationHeader(Request);
             return await _circuitsRepository.GetItemsAsync(authorizationHeader, circuitId);
