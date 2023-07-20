@@ -23,4 +23,22 @@ export const devConfiguration: EnvironmentConfiguration = {
   cognitoHostedUiDomainPrefix: 'exercise-circuits-dev'
 }
 
-export const environmentConfigurations: EnvironmentConfiguration[] = [devConfiguration]
+export const stagingConfiguration: EnvironmentConfiguration = {
+  awsEnv: stockholm,
+  projectName: 'exercise-circuits-backend',
+  stage: 'staging',
+  stageSubDomain: 'staging.',
+  origins: [ 'https://staging.exercise-circuits.cloudchaotic.com' ],
+  cognitoHostedUiDomainPrefix: 'exercise-circuits-staging'
+}
+
+export const prodConfiguration: EnvironmentConfiguration = {
+  awsEnv: stockholm,
+  projectName: 'exercise-circuits-backend',
+  stage: 'prod',
+  stageSubDomain: '',
+  origins: [ 'https://exercise-circuits.cloudchaotic.com' ],
+  cognitoHostedUiDomainPrefix: 'exercise-circuits-prod'
+}
+
+export const environmentConfigurations: EnvironmentConfiguration[] = [ devConfiguration, stagingConfiguration, prodConfiguration ]
