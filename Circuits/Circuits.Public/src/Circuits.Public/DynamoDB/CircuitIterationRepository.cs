@@ -16,14 +16,12 @@ namespace Circuits.Public.DynamoDB
     public class CircuitIterationRepository
     {
         private readonly IDynamoDbContextWrapper _dynamoDbContext;
-        private readonly IDynamoDbClientWrapper _dynamoDbClient;
         private readonly ITableWrapper _table;
         private readonly IUserInfoGetter _userInfoGetter;
 
-        public CircuitIterationRepository(IDynamoDbContextWrapper dynamoDbContext, IDynamoDbClientWrapper dynamoDbClient, ITableWrapper table, IUserInfoGetter userInfoGetter)
+        public CircuitIterationRepository(IDynamoDbContextWrapper dynamoDbContext, ITableWrapper table, IUserInfoGetter userInfoGetter)
         {
             _dynamoDbContext = dynamoDbContext;
-            _dynamoDbClient = dynamoDbClient;
             _table = table;
             _userInfoGetter = userInfoGetter;
         }
@@ -53,6 +51,7 @@ namespace Circuits.Public.DynamoDB
             var circuitIterations = iterationEntries.Select(entry => new CircuitIterationListing
             {
                 CircuitId = entry.CircuitIterationPointer.CircuitId,
+                IterationId = entry.IterationId,
                 DateStarted = entry.DateStarted,
                 DateCompleted = entry.DateCompleted
             });
@@ -63,7 +62,8 @@ namespace Circuits.Public.DynamoDB
         {
             var userId = await _userInfoGetter.GetUserIdAsync(authorizationHeader);
             var pointer = new CircuitPointer { UserId = userId, CircuitId = circuitId };
-            var iterationEntry = await _dynamoDbContext.QueryAsync<CircuitIteration>(pointer, QueryOperator.Equal, new List<string> { iterationId });
+            var iterationEntries = await _dynamoDbContext.QueryAsync<CircuitIterationEntry>(pointer, QueryOperator.Equal, new List<string> { iterationId });
+            var iterationEntry = iterationEntries.Single();
             var circuitIterationPointerPropertyConverter = new CircuitIterationPointerConverter();
             var circuitIterationPointer = new CircuitIterationPointer
             {
@@ -87,28 +87,73 @@ namespace Circuits.Public.DynamoDB
             var equipmentInstanceRegex = new Regex(equipmentInstancePattern);
             var recordedExerciseEntries = new List<RecordedExerciseEntry>();
             var exerciseSetEntries = new List<ExerciseSetEntry>();
-            var equipmentInstanceEntries = new List <EquipmentInstanceEntry>();
+            var equipmentInstanceEntries = new List<EquipmentInstanceEntry>();
             do
             {
                 var documentSet = await search.GetNextSetAsync();
-                foreach(var document in documentSet)
+                foreach (var document in documentSet)
                 {
                     var sk = document[AttributeNames.SK].AsString();
                     if (recordedExerciseRegex.IsMatch(sk))
                     {
                         var recorderExerciseEntry = _dynamoDbContext.FromDocument<RecordedExerciseEntry>(document);
                         recordedExerciseEntries.Add(recorderExerciseEntry);
-                    } else if (exerciseSetRegex.IsMatch(sk))
+                    }
+                    else if (exerciseSetRegex.IsMatch(sk))
                     {
                         var exerciseSetEntry = _dynamoDbContext.FromDocument<ExerciseSetEntry>(document);
                         exerciseSetEntries.Add(exerciseSetEntry);
-                    } else if (equipmentInstanceRegex.IsMatch(sk))
+                    }
+                    else if (equipmentInstanceRegex.IsMatch(sk))
                     {
                         var equipmentInstanceEntry = _dynamoDbContext.FromDocument<EquipmentInstanceEntry>(document);
                         equipmentInstanceEntries.Add(equipmentInstanceEntry);
                     }
                 }
             } while (!search.IsDone);
+
+            var recordedExercises = new List<RecordedExercise>();
+            foreach (var exercise in recordedExerciseEntries)
+            {
+                var exerciseSets = exerciseSetEntries.Where(
+                    set => set.ExerciseSetPointer.ItemId == exercise.RecordedExercisePointer.ItemId &&
+                    set.ExerciseSetPointer.OccurrenceId == exercise.RecordedExercisePointer.OccurrenceId)
+                    .Select(set =>
+                    {
+                        var equipmentItems = equipmentInstanceEntries.Where(
+                            equipment => equipment.EquipmentInstancePointer.ItemId == set.ExerciseSetPointer.ItemId &&
+                            equipment.EquipmentInstancePointer.OccurrenceId == set.ExerciseSetPointer.OccurrenceId &&
+                            equipment.EquipmentInstancePointer.SetId == set.ExerciseSetPointer.SetId).Select(equipment =>
+                            new EquipmentInstance
+                            {
+                                EquipmentId = equipment.EquipmentId,
+                                Count = equipment.Count,
+                                Load = equipment.Load,
+                                LoadUnit = (LoadUnit)equipment.LoadUnit
+                            }).ToList();
+                        return new ExerciseSet
+                        {
+                            EquipmentItems = equipmentItems,
+                            Index = set.SetIndex,
+                            RepetitionSize = set.RepetitionMeasurement
+                        };
+                    }).ToList();
+                var recordedExercise = new RecordedExercise
+                {
+                    ExerciseId = exercise.ExerciseId,
+                    ExerciseSets = exerciseSets,
+                    DateCompleted = exercise.DateCompleted,
+                };
+                recordedExercises.Add(recordedExercise);
+            }
+
+            return new CircuitIteration
+            {
+                CircuitId = iterationEntry.CircuitIterationPointer.CircuitId,
+                RecordedExercises = recordedExercises,
+                DateStarted = iterationEntry.DateStarted,
+                DateCompleted = iterationEntry.DateCompleted
+            };
         }
     }
 }

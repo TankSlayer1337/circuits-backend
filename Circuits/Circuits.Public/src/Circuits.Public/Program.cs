@@ -14,7 +14,9 @@ builder.Services.AddControllers();
 builder.Services.AddAWSLambdaHosting(LambdaEventSource.RestApi);
 
 builder.Services.AddTransient<CircuitsRepository>();
+builder.Services.AddTransient<CircuitIterationRepository>();
 builder.Services.AddScoped<IDynamoDbContextWrapper, DynamoDbContextWrapper>();
+builder.Services.AddTransient<ITableWrapper, TableWrapper>();
 builder.Services.AddScoped<AmazonDynamoDBClient>();
 builder.Services.AddHttpClient();
 builder.Services.AddScoped<IHttpClientWrapper, HttpClientWrapper>();

@@ -6,10 +6,10 @@ namespace Circuits.Public.DynamoDB.Models.CircuitIteration
 {
     public class CircuitIterationEntry
     {
-        [DynamoDBHashKey(typeof(CircuitPointerConverter))]
+        [DynamoDBHashKey(AttributeNames.PK, typeof(CircuitPointerConverter))]
         public CircuitPointer CircuitIterationPointer { get; init; }
 
-        [DynamoDBRangeKey(typeof(IterationIdConverter))]
+        [DynamoDBRangeKey(AttributeNames.SK, typeof(IterationIdConverter))]
         public string IterationId { get; init; } = string.Empty;
 
         [DynamoDBProperty(AttributeNames.DateStarted)]
