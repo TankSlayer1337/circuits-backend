@@ -1,29 +1,23 @@
 ﻿using Amazon.DynamoDBv2.DocumentModel;
 using Circuits.Public.DynamoDB.Extensions;
-using Circuits.Public.DynamoDB.Models;
 using Circuits.Public.DynamoDB.Models.CircuitIteration;
 using Circuits.Public.DynamoDB.Models.CircuitIteration.IterationModels;
-using Circuits.Public.DynamoDB.Models.CircuitIteration.IterationModels.EquipmentInstance;
-using Circuits.Public.DynamoDB.Models.CircuitIteration.IterationModels.ExerciseSet;
-using Circuits.Public.DynamoDB.PropertyConverters;
-using Circuits.Public.DynamoDB.PropertyConverters.MultipleProperties;
 using Circuits.Public.PresentationModels.CircuitRecordingModels;
 using Circuits.Public.UserInfo;
-using System.Text.RegularExpressions;
 
 namespace Circuits.Public.DynamoDB
 {
     public class CircuitIterationRepository
     {
         private readonly IDynamoDbContextWrapper _dynamoDbContext;
-        private readonly ITableWrapper _table;
         private readonly IUserInfoGetter _userInfoGetter;
+        private readonly ITableQuerier _tableQuerier;
 
-        public CircuitIterationRepository(IDynamoDbContextWrapper dynamoDbContext, ITableWrapper table, IUserInfoGetter userInfoGetter)
+        public CircuitIterationRepository(IDynamoDbContextWrapper dynamoDbContext, IUserInfoGetter userInfoGetter, ITableQuerier tableQuerier)
         {
             _dynamoDbContext = dynamoDbContext;
-            _table = table;
             _userInfoGetter = userInfoGetter;
+            _tableQuerier = tableQuerier;
         }
 
         public async Task<string> AddIterationAsync(string authorizationHeader, string circuitId)
@@ -64,63 +58,34 @@ namespace Circuits.Public.DynamoDB
             var pointer = new CircuitPointer { UserId = userId, CircuitId = circuitId };
             var iterationEntries = await _dynamoDbContext.QueryAsync<CircuitIterationEntry>(pointer, QueryOperator.Equal, new List<string> { iterationId });
             var iterationEntry = iterationEntries.Single();
-            var circuitIterationPointerPropertyConverter = new CircuitIterationPointerConverter();
             var circuitIterationPointer = new CircuitIterationPointer
             {
                 UserId = userId,
                 CircuitId = circuitId,
                 IterationId = iterationId
             };
-            var pk = circuitIterationPointerPropertyConverter.ToEntry(circuitIterationPointer).AsString();
-            var queryFilter = new QueryFilter(AttributeNames.SK, QueryOperator.BeginsWith, PropertyConverterConstants.ItemId);
-            var search = _table.Query(pk, queryFilter);
-            const string guidPattern = "[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}";
-            const string itemId = PropertyConverterConstants.ItemId;
-            const string occurrenceId = PropertyConverterConstants.OccurrenceId;
-            const string setId = PropertyConverterConstants.SetId;
-            const string equipmentInstanceId = PropertyConverterConstants.EquipmentInstanceId;
-            const string recordedExercisePattern = $"^{itemId}#{guidPattern}#{occurrenceId}#{guidPattern}$";
-            var recordedExerciseRegex = new Regex(recordedExercisePattern);
-            const string exerciseSetPattern = $"^{itemId}#{guidPattern}#{occurrenceId}#{guidPattern}#{setId}#{guidPattern}$";
-            var exerciseSetRegex = new Regex(exerciseSetPattern);
-            const string equipmentInstancePattern = $"^{itemId}#{guidPattern}#{occurrenceId}#{guidPattern}#{setId}#{guidPattern}#{equipmentInstanceId}#{guidPattern}$";
-            var equipmentInstanceRegex = new Regex(equipmentInstancePattern);
-            var recordedExerciseEntries = new List<RecordedExerciseEntry>();
-            var exerciseSetEntries = new List<ExerciseSetEntry>();
-            var equipmentInstanceEntries = new List<EquipmentInstanceEntry>();
-            do
+            var iterationQueryResult = await _tableQuerier.RunIterationQueryAsync(circuitIterationPointer);
+            var recordedExercises = ExtractRecordedExercises(iterationQueryResult);
+            return new CircuitIteration
             {
-                var documentSet = await search.GetNextSetAsync();
-                foreach (var document in documentSet)
-                {
-                    var sk = document[AttributeNames.SK].AsString();
-                    if (recordedExerciseRegex.IsMatch(sk))
-                    {
-                        var recorderExerciseEntry = _dynamoDbContext.FromDocument<RecordedExerciseEntry>(document);
-                        recordedExerciseEntries.Add(recorderExerciseEntry);
-                    }
-                    else if (exerciseSetRegex.IsMatch(sk))
-                    {
-                        var exerciseSetEntry = _dynamoDbContext.FromDocument<ExerciseSetEntry>(document);
-                        exerciseSetEntries.Add(exerciseSetEntry);
-                    }
-                    else if (equipmentInstanceRegex.IsMatch(sk))
-                    {
-                        var equipmentInstanceEntry = _dynamoDbContext.FromDocument<EquipmentInstanceEntry>(document);
-                        equipmentInstanceEntries.Add(equipmentInstanceEntry);
-                    }
-                }
-            } while (!search.IsDone);
+                CircuitId = iterationEntry.CircuitIterationPointer.CircuitId,
+                RecordedExercises = recordedExercises,
+                DateStarted = iterationEntry.DateStarted,
+                DateCompleted = iterationEntry.DateCompleted
+            };
+        }
 
+        private static List<RecordedExercise> ExtractRecordedExercises(IterationQueryResult iterationQueryResult)
+        {
             var recordedExercises = new List<RecordedExercise>();
-            foreach (var exercise in recordedExerciseEntries)
+            foreach (var exercise in iterationQueryResult.ExerciseEntries)
             {
-                var exerciseSets = exerciseSetEntries.Where(
+                var exerciseSets = iterationQueryResult.ExerciseSets.Where(
                     set => set.ExerciseSetPointer.ItemId == exercise.RecordedExercisePointer.ItemId &&
                     set.ExerciseSetPointer.OccurrenceId == exercise.RecordedExercisePointer.OccurrenceId)
                     .Select(set =>
                     {
-                        var equipmentItems = equipmentInstanceEntries.Where(
+                        var equipmentItems = iterationQueryResult.EquipmentInstances.Where(
                             equipment => equipment.EquipmentInstancePointer.ItemId == set.ExerciseSetPointer.ItemId &&
                             equipment.EquipmentInstancePointer.OccurrenceId == set.ExerciseSetPointer.OccurrenceId &&
                             equipment.EquipmentInstancePointer.SetId == set.ExerciseSetPointer.SetId).Select(equipment =>
@@ -146,14 +111,7 @@ namespace Circuits.Public.DynamoDB
                 };
                 recordedExercises.Add(recordedExercise);
             }
-
-            return new CircuitIteration
-            {
-                CircuitId = iterationEntry.CircuitIterationPointer.CircuitId,
-                RecordedExercises = recordedExercises,
-                DateStarted = iterationEntry.DateStarted,
-                DateCompleted = iterationEntry.DateCompleted
-            };
+            return recordedExercises;
         }
     }
 }

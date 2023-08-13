@@ -17,6 +17,7 @@ builder.Services.AddTransient<CircuitsRepository>();
 builder.Services.AddTransient<CircuitIterationRepository>();
 builder.Services.AddScoped<IDynamoDbContextWrapper, DynamoDbContextWrapper>();
 builder.Services.AddTransient<ITableWrapper, TableWrapper>();
+builder.Services.AddTransient<ITableQuerier, TableQuerier>();
 builder.Services.AddScoped<AmazonDynamoDBClient>();
 builder.Services.AddHttpClient();
 builder.Services.AddScoped<IHttpClientWrapper, HttpClientWrapper>();
