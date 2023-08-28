@@ -7,7 +7,7 @@ namespace Circuits.Public.DynamoDB.Models.CircuitIteration
     public class CircuitIterationEntry
     {
         [DynamoDBHashKey(AttributeNames.PK, typeof(CircuitPointerConverter))]
-        public CircuitPointer CircuitIterationPointer { get; init; }
+        public CircuitPointer CircuitPointer { get; init; }
 
         [DynamoDBRangeKey(AttributeNames.SK, typeof(IterationIdConverter))]
         public string IterationId { get; init; } = string.Empty;

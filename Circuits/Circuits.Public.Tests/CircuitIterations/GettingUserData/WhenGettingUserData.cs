@@ -15,7 +15,28 @@ namespace Circuits.Public.Tests.CircuitIterations.GettingUserData
         [Fact]
         public async Task ForIterationsWithValidRequestAsync()
         {
+            // GIVEN UserInfo endpoint is simulated
+            var (userId, authorizationHeader) = UserInfoEndpointSimulator.SimulateUserInfoEndpoint(_httpClientWrapperMocker, _environmentVariableGetterMocker);
 
+            // GIVEN a CircuitId
+            var circuitId = _faker.Random.Guid().ToString();
+
+            // GIVEN iterations exist
+            var expectedCircuitIterationListings = CreateRandomCircuitIterationListings(circuitId, userId);
+
+            // GIVEN corresponding circuit iteration entries
+            var circuitIterationEntries = CreateIterationEntries(expectedCircuitIterationListings, userId);
+
+            // GIVEN DynamoDB is simulated to return circuit iteration entries
+            var circuitPointer = new CircuitPointer { UserId = userId, CircuitId = circuitId };
+            _contextWrapperMocker.SimulateQueryAsync(circuitPointer, QueryOperator.BeginsWith, new string[] { string.Empty }, circuitIterationEntries);
+
+            // WHEN retrieving iterations
+            var circuitIterationRepository = BuildCircuitIterationRepository();
+            var result = await circuitIterationRepository.GetIterationsAsync(authorizationHeader, circuitId);
+
+            // THEN the correct iteration should be returned
+            result.Should().BeEquivalentTo(expectedCircuitIterationListings);
         }
 
         [Fact]
@@ -26,18 +47,17 @@ namespace Circuits.Public.Tests.CircuitIterations.GettingUserData
 
             // GIVEN an iteration
             var iterationEntry = CreateRandomIterationEntry(userId);
-            var circuitId = iterationEntry.CircuitIterationPointer.CircuitId;
+            var circuitId = iterationEntry.CircuitPointer.CircuitId;
             var iterationId = iterationEntry.IterationId;
 
             // GIVEN DynamoDB is simulated to return CircuitIterationEntry
-            var circuitPointer = new CircuitPointer { UserId = userId, CircuitId = circuitId };
-            _contextWrapperMocker.SimulateQueryAsync(circuitPointer, QueryOperator.Equal, new string[] { iterationId }, new List<CircuitIterationEntry>() { iterationEntry });
+            _contextWrapperMocker.SimulateQueryAsync(iterationEntry.CircuitPointer, QueryOperator.Equal, new string[] { iterationId }, new List<CircuitIterationEntry>() { iterationEntry });
 
             // GIVEN expected circuit iteration data
             var expectedCircuitIteration = CreateRandomCircuitIteration(iterationEntry);
 
             // GIVEN TableQuerier is simulated to return iteration items from query
-            SimulateTableQuerier(expectedCircuitIteration, circuitId, iterationId);
+            SimulateTableQuerier(expectedCircuitIteration, iterationId, userId);
 
             // WHEN retrieving iteration
             var circuitIterationRepository = BuildCircuitIterationRepository();
@@ -59,29 +79,50 @@ namespace Circuits.Public.Tests.CircuitIterations.GettingUserData
             _tableQuerierMocker.SimulateRunIterationQueryAsync(circuitIterationPointer, iterationQueryResult);
         }
 
-        private List<CircuitIterationEntry> CreateRandomIterationEntries(string userId)
+        private List<CircuitIterationListing> CreateRandomCircuitIterationListings(string circuitId, string userId)
         {
-            var entries = new List<CircuitIterationEntry>();
             var length = _faker.Random.Int(1, 5);
+            var listings = new List<CircuitIterationListing>();
             for (var i = 0; i < length; i++)
             {
-                var entry = CreateRandomIterationEntry(userId);
-                entries.Add(entry);
+                var listing = new CircuitIterationListing
+                {
+                    CircuitId = circuitId,
+                    IterationId = _faker.Random.Guid().ToString(),
+                    DateStarted = _faker.Date.Past().ToString(),
+                    DateCompleted = _faker.Random.Bool() ? string.Empty : _faker.Date.Recent().ToString()
+                };
+                listings.Add(listing);
             }
-            return entries;
+            return listings;
         }
 
-        private CircuitIterationEntry CreateRandomIterationEntry(string userId)
+        private List<CircuitIterationEntry> CreateIterationEntries(List<CircuitIterationListing> expectedCircuitIterationListings, string userId)
+        {
+            return expectedCircuitIterationListings.Select(listing => new CircuitIterationEntry
+            {
+                CircuitPointer = new CircuitPointer
+                {
+                    CircuitId = listing.CircuitId,
+                    UserId = userId
+                },
+                IterationId = listing.IterationId,
+                DateStarted = listing.DateStarted,
+                DateCompleted = listing.DateCompleted
+            }).ToList();
+        }
+
+        private CircuitIterationEntry CreateRandomIterationEntry(string userId, string? circuitId = null)
         {
             var circuitPointer = new CircuitPointer
             {
-                CircuitId = _faker.Random.Guid().ToString(),
+                CircuitId = circuitId ?? _faker.Random.Guid().ToString(),
                 UserId = userId
             };
             var dateCompleted = _faker.Random.Bool() ? _faker.Date.Recent().ToString() : string.Empty;
             var entry = new CircuitIterationEntry
             {
-                CircuitIterationPointer = circuitPointer,
+                CircuitPointer = circuitPointer,
                 IterationId = _faker.Random.Guid().ToString(),
                 DateStarted = _faker.Date.Past().ToString(),
                 DateCompleted = dateCompleted
@@ -168,7 +209,7 @@ namespace Circuits.Public.Tests.CircuitIterations.GettingUserData
         {
             return new CircuitIteration
             {
-                CircuitId = iterationEntry.CircuitIterationPointer.CircuitId,
+                CircuitId = iterationEntry.CircuitPointer.CircuitId,
                 RecordedExercises = CreateRandomRecordedExercises(),
                 DateStarted = iterationEntry.DateStarted,
                 DateCompleted = iterationEntry.DateCompleted

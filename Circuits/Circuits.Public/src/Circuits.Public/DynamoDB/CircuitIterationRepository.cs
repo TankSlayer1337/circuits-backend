@@ -25,7 +25,7 @@ namespace Circuits.Public.DynamoDB
             var userId = await _userInfoGetter.GetUserIdAsync(authorizationHeader);
             var circuitIterationEntry = new CircuitIterationEntry
             {
-                CircuitIterationPointer = new CircuitPointer
+                CircuitPointer = new CircuitPointer
                 {
                     UserId = userId,
                     CircuitId = circuitId
@@ -44,7 +44,7 @@ namespace Circuits.Public.DynamoDB
             var iterationEntries = await _dynamoDbContext.QueryWithEmptyBeginsWith<CircuitIterationEntry>(pointer);
             var circuitIterations = iterationEntries.Select(entry => new CircuitIterationListing
             {
-                CircuitId = entry.CircuitIterationPointer.CircuitId,
+                CircuitId = entry.CircuitPointer.CircuitId,
                 IterationId = entry.IterationId,
                 DateStarted = entry.DateStarted,
                 DateCompleted = entry.DateCompleted
@@ -68,7 +68,7 @@ namespace Circuits.Public.DynamoDB
             var recordedExercises = ExtractRecordedExercises(iterationQueryResult);
             return new CircuitIteration
             {
-                CircuitId = iterationEntry.CircuitIterationPointer.CircuitId,
+                CircuitId = iterationEntry.CircuitPointer.CircuitId,
                 RecordedExercises = recordedExercises,
                 DateStarted = iterationEntry.DateStarted,
                 DateCompleted = iterationEntry.DateCompleted
