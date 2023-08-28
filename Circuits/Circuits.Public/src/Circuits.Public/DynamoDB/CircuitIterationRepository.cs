@@ -1,4 +1,5 @@
 ﻿using Amazon.DynamoDBv2.DocumentModel;
+using Circuits.Public.Controllers.Models.IterationModels;
 using Circuits.Public.DynamoDB.Extensions;
 using Circuits.Public.DynamoDB.Models.CircuitIteration;
 using Circuits.Public.DynamoDB.Models.CircuitIteration.IterationModels;
@@ -73,6 +74,29 @@ namespace Circuits.Public.DynamoDB
                 DateStarted = iterationEntry.DateStarted,
                 DateCompleted = iterationEntry.DateCompleted
             };
+        }
+
+        // TODO: add validation
+        public async Task<string> AddRecordedExercise(string authorizationHeader, AddRecordedExerciseRequest request)
+        {
+            var userId = await _userInfoGetter.GetUserIdAsync(authorizationHeader);
+            var recordedExercise = new RecordedExerciseEntry
+            {
+                CircuitIterationPointer = new CircuitIterationPointer
+                {
+                    CircuitId = request.CircuitId,
+                    IterationId = request.IterationId,
+                    UserId = userId
+                },
+                RecordedExercisePointer = new RecordedExercisePointer
+                {
+                    ItemId = request.ItemId,
+                    OccurrenceId = Guid.NewGuid().ToString()
+                },
+                ExerciseId = request.ExerciseId
+            };
+            await _dynamoDbContext.SaveAsync(recordedExercise);
+            return recordedExercise.RecordedExercisePointer.OccurrenceId;
         }
 
         private static List<RecordedExercise> ExtractRecordedExercises(IterationQueryResult iterationQueryResult)
