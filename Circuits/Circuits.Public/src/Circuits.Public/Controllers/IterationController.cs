@@ -1,6 +1,8 @@
-﻿using Circuits.Public.DynamoDB;
+﻿using Circuits.Public.Controllers.Models.IterationModels;
+using Circuits.Public.DynamoDB;
 using Circuits.Public.PresentationModels.CircuitRecordingModels;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 
 namespace Circuits.Public.Controllers
 {
@@ -33,6 +35,13 @@ namespace Circuits.Public.Controllers
         {
             var authorizationHeader = Utils.GetAuthorizationHeader(Request);
             return await _circuitIterationRepository.GetIterationAsync(authorizationHeader, circuitId, iterationId);
+        }
+
+        [HttpPost("iteration/exercise")]
+        public async Task<ActionResult<string>> AddExercise([FromBody] AddRecordedExerciseRequest request)
+        {
+            var authorizationHeader = Utils.GetAuthorizationHeader(Request);
+            return await _circuitIterationRepository.AddRecordedExercise(authorizationHeader, request);
         }
     }
 }
