@@ -1,7 +1,7 @@
 ﻿using Circuits.Public.DynamoDB.Models.CircuitIteration;
 using Circuits.Public.Tests.Utils;
 
-namespace Circuits.Public.Tests.CircuitIteration.AddingUserData
+namespace Circuits.Public.Tests.CircuitIterations.AddingUserData
 {
     public class WhenAddingCircuitIteration : CircuitIterationRepositoryTestBase
     {

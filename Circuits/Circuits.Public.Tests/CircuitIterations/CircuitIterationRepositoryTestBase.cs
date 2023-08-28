@@ -3,7 +3,7 @@ using Circuits.Public.Tests.Mockers;
 using Circuits.Public.UserInfo;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Circuits.Public.Tests.CircuitIteration
+namespace Circuits.Public.Tests.CircuitIterations
 {
     public class CircuitIterationRepositoryTestBase
     {
