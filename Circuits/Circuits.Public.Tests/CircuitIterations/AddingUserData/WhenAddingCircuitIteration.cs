@@ -1,7 +1,7 @@
 ﻿using Circuits.Public.DynamoDB.Models.CircuitIteration;
 using Circuits.Public.Tests.Utils;
 
-namespace Circuits.Public.Tests.CircuitIteration.AddingUserData
+namespace Circuits.Public.Tests.CircuitIterations.AddingUserData
 {
     public class WhenAddingCircuitIteration : CircuitIterationRepositoryTestBase
     {
@@ -33,8 +33,8 @@ namespace Circuits.Public.Tests.CircuitIteration.AddingUserData
         private void VerifyEntryWasSaved(string userId, string circuitId, CircuitIterationEntry? savedEntry, string result)
         {
             _contextWrapperMocker.Mock.Verify(mock => mock.SaveAsync(It.IsAny<CircuitIterationEntry>()), Times.Once);
-            savedEntry?.CircuitIterationPointer.UserId.Should().Be(userId);
-            savedEntry?.CircuitIterationPointer.CircuitId.Should().Be(circuitId);
+            savedEntry?.CircuitPointer.UserId.Should().Be(userId);
+            savedEntry?.CircuitPointer.CircuitId.Should().Be(circuitId);
             savedEntry?.IterationId.Should().Be(result);
             var savedDateStarted = DateTime.Parse(savedEntry?.DateStarted);
             savedDateStarted.Should().BeCloseTo(DateTime.UtcNow, TimeSpan.FromSeconds(5));

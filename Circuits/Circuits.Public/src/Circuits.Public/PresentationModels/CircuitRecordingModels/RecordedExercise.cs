@@ -4,6 +4,6 @@
     {
         public string ExerciseId { get; init; } = string.Empty;
         public string DateCompleted { get; init; } = string.Empty;
-        public ExerciseSet ExerciseSet { get; init; }
+        public List<ExerciseSet> ExerciseSets { get; init; } = new List<ExerciseSet>();
     }
 }

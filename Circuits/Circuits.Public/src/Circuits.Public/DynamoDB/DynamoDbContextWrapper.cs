@@ -33,5 +33,10 @@ namespace Circuits.Public.DynamoDB
         {
             return _dynamoDbContext.QueryAsync<T>(hashKeyValue, queryOperator, values, _operationConfig).GetRemainingAsync();
         }
+
+        public T FromDocument<T>(Document document)
+        {
+            return _dynamoDbContext.FromDocument<T>(document);
+        }
     }
 }

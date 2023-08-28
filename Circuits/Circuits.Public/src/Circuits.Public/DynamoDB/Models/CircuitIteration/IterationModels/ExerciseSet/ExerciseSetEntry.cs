@@ -6,10 +6,10 @@ namespace Circuits.Public.DynamoDB.Models.CircuitIteration.IterationModels.Exerc
 {
     public class ExerciseSetEntry
     {
-        [DynamoDBHashKey(typeof(CircuitIterationPointerConverter))]
+        [DynamoDBHashKey(AttributeNames.PK, typeof(CircuitIterationPointerConverter))]
         public CircuitIterationPointer CircuitIterationPointer { get; init; }
 
-        [DynamoDBRangeKey(typeof(ExerciseSetPointerConverter))]
+        [DynamoDBRangeKey(AttributeNames.SK, typeof(ExerciseSetPointerConverter))]
         public ExerciseSetPointer ExerciseSetPointer { get; init; }
 
         [DynamoDBProperty(AttributeNames.SetIndex)]

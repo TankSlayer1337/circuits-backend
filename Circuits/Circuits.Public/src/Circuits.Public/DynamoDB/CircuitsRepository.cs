@@ -1,5 +1,6 @@
 ﻿using Amazon.DynamoDBv2.DocumentModel;
 using Circuits.Public.Controllers.Models.AddRequests;
+using Circuits.Public.DynamoDB.Extensions;
 using Circuits.Public.DynamoDB.Models.CircuitDefinition;
 using Circuits.Public.PresentationModels.CircuitDefinitionModels;
 using Circuits.Public.UserInfo;
@@ -29,7 +30,7 @@ namespace Circuits.Public.DynamoDB
         public async Task<List<Circuit>> GetCircuitsAsync(string authorizationHeader)
         {
             var userId = await _userInfoGetter.GetUserIdAsync(authorizationHeader);
-            var circuitEntries = await QueryWithEmptyBeginsWith<CircuitEntry>(userId);
+            var circuitEntries = await _dynamoDbContext.QueryWithEmptyBeginsWith<CircuitEntry>(userId);
             var circuits = circuitEntries.Select(entry => new Circuit
             {
                 Id = entry.CircuitId,
@@ -55,7 +56,7 @@ namespace Circuits.Public.DynamoDB
                 UserId = userId,
                 CircuitId = circuitId
             };
-            var itemEntries = await QueryWithEmptyBeginsWith<ItemEntry>(pointer);
+            var itemEntries = await _dynamoDbContext.QueryWithEmptyBeginsWith<ItemEntry>(pointer);
             var items = new List<Item>();
             foreach (var entry in itemEntries)
             {
@@ -84,7 +85,7 @@ namespace Circuits.Public.DynamoDB
         public async Task<List<Exercise>> GetExercisesAsync(string authorizationHeader)
         {
             var userId = await _userInfoGetter.GetUserIdAsync(authorizationHeader);
-            var exerciseEntries = await QueryWithEmptyBeginsWith<ExerciseEntry>(userId);
+            var exerciseEntries = await _dynamoDbContext.QueryWithEmptyBeginsWith<ExerciseEntry>(userId);
             var exercises = new List<Exercise>();
             foreach (var entry in exerciseEntries)
             {
@@ -126,7 +127,7 @@ namespace Circuits.Public.DynamoDB
         public async Task<List<Equipment>> GetEquipmentAsync(string authorizationHeader)
         {
             var userId = await _userInfoGetter.GetUserIdAsync(authorizationHeader);
-            var equipmentEntries = await QueryWithEmptyBeginsWith<EquipmentEntry>(userId);
+            var equipmentEntries = await _dynamoDbContext.QueryWithEmptyBeginsWith<EquipmentEntry>(userId);
             var equipment = equipmentEntries.Select(entry => new Equipment
             {
                 Id = entry.EquipmentId,
@@ -146,11 +147,6 @@ namespace Circuits.Public.DynamoDB
                 Name = equipmentEntry.Name,
                 CanBeUsedInMultiples = equipmentEntry.CanBeUsedInMultiples
             };
-        }
-
-        private Task<List<T>> QueryWithEmptyBeginsWith<T>(object hashKeyValue) where T : class
-        {
-            return _dynamoDbContext.QueryAsync<T>(hashKeyValue, QueryOperator.BeginsWith, new string[] { string.Empty });
         }
     }
 }

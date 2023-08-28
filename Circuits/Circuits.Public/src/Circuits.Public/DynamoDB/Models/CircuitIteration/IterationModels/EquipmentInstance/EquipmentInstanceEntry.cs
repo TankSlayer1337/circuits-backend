@@ -6,10 +6,10 @@ namespace Circuits.Public.DynamoDB.Models.CircuitIteration.IterationModels.Equip
 {
     public class EquipmentInstanceEntry
     {
-        [DynamoDBHashKey(typeof(CircuitIterationPointerConverter))]
+        [DynamoDBHashKey(AttributeNames.PK, typeof(CircuitIterationPointerConverter))]
         public CircuitIterationPointer CircuitIterationPointer { get; init; }
 
-        [DynamoDBRangeKey(typeof(EquipmentInstancePointerConverter))]
+        [DynamoDBRangeKey(AttributeNames.SK, typeof(EquipmentInstancePointerConverter))]
         public EquipmentInstancePointer EquipmentInstancePointer { get; init; }
 
         [DynamoDBProperty(AttributeNames.ID1, typeof(EquipmentIdConverter))]
@@ -22,6 +22,6 @@ namespace Circuits.Public.DynamoDB.Models.CircuitIteration.IterationModels.Equip
         public float Load { get; init; }
 
         [DynamoDBProperty(AttributeNames.LoadUnit)]
-        public float LoadUnit { get; init; }
+        public int LoadUnit { get; init; }
     }
 }
