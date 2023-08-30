@@ -43,5 +43,12 @@ namespace Circuits.Public.Controllers
             var authorizationHeader = Utils.GetAuthorizationHeader(Request);
             return await _circuitIterationRepository.AddRecordedExercise(authorizationHeader, request);
         }
+
+        [HttpPost("iteration/set")]
+        public async Task<ActionResult<string>> AddSet([FromBody] AddExerciseSetRequest request)
+        {
+            var authorizationHeader = Utils.GetAuthorizationHeader(Request);
+            return await _circuitIterationRepository.AddExerciseSet(authorizationHeader, request);
+        }
     }
 }

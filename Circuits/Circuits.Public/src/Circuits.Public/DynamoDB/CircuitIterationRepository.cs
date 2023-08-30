@@ -3,6 +3,7 @@ using Circuits.Public.Controllers.Models.IterationModels;
 using Circuits.Public.DynamoDB.Extensions;
 using Circuits.Public.DynamoDB.Models.CircuitIteration;
 using Circuits.Public.DynamoDB.Models.CircuitIteration.IterationModels;
+using Circuits.Public.DynamoDB.Models.CircuitIteration.IterationModels.ExerciseSet;
 using Circuits.Public.PresentationModels.CircuitRecordingModels;
 using Circuits.Public.UserInfo;
 
@@ -97,6 +98,33 @@ namespace Circuits.Public.DynamoDB
             };
             await _dynamoDbContext.SaveAsync(recordedExercise);
             return recordedExercise.RecordedExercisePointer.OccurrenceId;
+        }
+
+        public async Task<string> AddExerciseSet(string authorizationHeader, AddExerciseSetRequest request)
+        {
+            var userId = await _userInfoGetter.GetUserIdAsync(authorizationHeader);
+            var exerciseSet = new ExerciseSetEntry
+            {
+                CircuitIterationPointer = new CircuitIterationPointer
+                {
+                    CircuitId = request.CircuitId,
+                    IterationId = request.IterationId,
+                    UserId = userId
+                },
+                ExerciseSetPointer = new ExerciseSetPointer
+                {
+                    ItemId = request.ItemId,
+                    OccurrenceId = request.OccurrenceId,
+                    SetId = Guid.NewGuid().ToString()
+                },
+                // TODO: set this from looking up other sets?
+                SetIndex = request.SetIndex,
+                // TODO: lookup in DynamoDB instead of including in request.
+                RepetitionType = request.RepetitionType,
+                RepetitionMeasurement = request.RepetitionMeasurement
+            };
+            await _dynamoDbContext.SaveAsync(exerciseSet);
+            return exerciseSet.ExerciseSetPointer.SetId;
         }
 
         private static List<RecordedExercise> ExtractRecordedExercises(IterationQueryResult iterationQueryResult)
