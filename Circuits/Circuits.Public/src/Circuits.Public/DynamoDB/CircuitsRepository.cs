@@ -48,9 +48,14 @@ namespace Circuits.Public.DynamoDB
             return itemEntry.ItemId;
         }
 
-        public async Task<List<Item>> GetItemsAsync(string authorizationHeader, string circuitId)
+        public async Task<List<Item>> GetItemsAsyncWithAuthorizationHeader(string authorizationHeader, string circuitId)
         {
             var userId = await _userInfoGetter.GetUserIdAsync(authorizationHeader);
+            return await GetItemsAsyncWithUserId(userId, circuitId);
+        }
+
+        public async Task<List<Item>> GetItemsAsyncWithUserId(string userId, string circuitId)
+        {
             var pointer = new CircuitItemPointer
             {
                 UserId = userId,

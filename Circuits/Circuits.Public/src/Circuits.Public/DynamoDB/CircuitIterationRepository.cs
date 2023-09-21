@@ -15,12 +15,14 @@ namespace Circuits.Public.DynamoDB
         private readonly IDynamoDbContextWrapper _dynamoDbContext;
         private readonly IUserInfoGetter _userInfoGetter;
         private readonly ITableQuerier _tableQuerier;
+        private readonly CircuitsRepository _circuitsRepository;
 
-        public CircuitIterationRepository(IDynamoDbContextWrapper dynamoDbContext, IUserInfoGetter userInfoGetter, ITableQuerier tableQuerier)
+        public CircuitIterationRepository(IDynamoDbContextWrapper dynamoDbContext, IUserInfoGetter userInfoGetter, ITableQuerier tableQuerier, CircuitsRepository circuitsRepository)
         {
             _dynamoDbContext = dynamoDbContext;
             _userInfoGetter = userInfoGetter;
             _tableQuerier = tableQuerier;
+            _circuitsRepository = circuitsRepository;
         }
 
         public async Task<string> AddIterationAsync(string authorizationHeader, string circuitId)
@@ -37,7 +39,40 @@ namespace Circuits.Public.DynamoDB
                 DateStarted = DateTime.UtcNow.ToString()
             };
             await _dynamoDbContext.SaveAsync(circuitIterationEntry);
+            await CreateEmptyIterationEntries(userId, circuitIterationEntry.CircuitPointer, circuitIterationEntry.IterationId);
             return circuitIterationEntry.IterationId;
+        }
+
+        private async Task CreateEmptyIterationEntries(string userId, CircuitPointer circuitPointer, string iterationId)
+        {
+            var circuitItems = await _circuitsRepository.GetItemsAsyncWithUserId(userId, circuitPointer.CircuitId);
+            var recordedExerciseEntries = new List<RecordedExerciseEntry>();
+            foreach(var circuitItem in circuitItems)
+            {
+                for (var i = 0; i < circuitItem.OccurrenceWeight; i++)
+                {
+                    var recordedExerciseEntry = new RecordedExerciseEntry
+                    {
+                        CircuitIterationPointer = new CircuitIterationPointer
+                        {
+                            CircuitId = circuitPointer.CircuitId,
+                            UserId = userId,
+                            IterationId = iterationId
+                        },
+                        RecordedExercisePointer = new RecordedExercisePointer
+                        {
+                            ItemId = circuitItem.ItemId,
+                            OccurrenceId = Guid.NewGuid().ToString()
+                        }
+                    };
+                    recordedExerciseEntries.Add(recordedExerciseEntry);
+                }
+            }
+            // this can be made more efficient by using batch write.
+            foreach(var entry in recordedExerciseEntries)
+            {
+                await _dynamoDbContext.SaveAsync(entry);
+            }
         }
 
         public async Task<List<CircuitIterationListing>> GetIterationsAsync(string authorizationHeader, string circuitId)

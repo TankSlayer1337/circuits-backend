@@ -20,6 +20,7 @@ namespace Circuits.Public.Tests.CircuitIterations
             services.AddSingleton(_httpClientWrapperMocker.Mock.Object);
             services.AddSingleton(_environmentVariableGetterMocker.Mock.Object);
             services.AddSingleton(_tableQuerierMocker.Mock.Object);
+            services.AddTransient<CircuitsRepository>();
             services.AddTransient<CircuitIterationRepository>();
             services.AddTransient<IUserInfoGetter, UserInfoGetter>();
             var serviceProvider = services.BuildServiceProvider();

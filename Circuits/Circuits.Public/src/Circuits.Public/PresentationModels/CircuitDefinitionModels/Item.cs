@@ -4,7 +4,7 @@
     {
         public string ItemId { get; init; } = string.Empty;
         public uint Index { get; init; }
-        public uint OccurrenceWeight { get; init; } = 0;
+        public uint OccurrenceWeight { get; init; } = 1;
         public Exercise Exercise { get; init; }
     }
 }
