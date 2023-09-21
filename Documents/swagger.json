@@ -1,0 +1,1197 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Circuits.Public",
+    "version": "1.0"
+  },
+  "paths": {
+    "/Calculator/add/{x}/{y}": {
+      "get": {
+        "tags": [
+          "Calculator"
+        ],
+        "parameters": [
+          {
+            "name": "x",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "y",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/Calculator/subtract/{x}/{y}": {
+      "get": {
+        "tags": [
+          "Calculator"
+        ],
+        "parameters": [
+          {
+            "name": "x",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "y",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/Calculator/multiply/{x}/{y}": {
+      "get": {
+        "tags": [
+          "Calculator"
+        ],
+        "parameters": [
+          {
+            "name": "x",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "y",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/Calculator/divide/{x}/{y}": {
+      "get": {
+        "tags": [
+          "Calculator"
+        ],
+        "parameters": [
+          {
+            "name": "x",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "y",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/equipment": {
+      "post": {
+        "tags": [
+          "Circuits"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddEquipmentRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddEquipmentRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddEquipmentRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Circuits"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Equipment"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Equipment"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Equipment"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/exercises": {
+      "post": {
+        "tags": [
+          "Circuits"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddExerciseRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddExerciseRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddExerciseRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Circuits"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Exercise"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Exercise"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Exercise"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/circuits": {
+      "post": {
+        "tags": [
+          "Circuits"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddCircuitRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddCircuitRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddCircuitRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Circuits"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Circuit"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Circuit"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Circuit"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/items": {
+      "post": {
+        "tags": [
+          "Circuits"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddItemRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddItemRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddItemRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/items/{circuitId}": {
+      "get": {
+        "tags": [
+          "Circuits"
+        ],
+        "parameters": [
+          {
+            "name": "circuitId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Item"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Item"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Item"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/iteration": {
+      "post": {
+        "tags": [
+          "Iteration"
+        ],
+        "parameters": [
+          {
+            "name": "circuitId",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Iteration"
+        ],
+        "parameters": [
+          {
+            "name": "circuitId",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "iterationId",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/CircuitIteration"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CircuitIteration"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CircuitIteration"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/iterations": {
+      "get": {
+        "tags": [
+          "Iteration"
+        ],
+        "parameters": [
+          {
+            "name": "circuitId",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CircuitIterationListing"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CircuitIterationListing"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CircuitIterationListing"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/iteration/exercise": {
+      "post": {
+        "tags": [
+          "Iteration"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddRecordedExerciseRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddRecordedExerciseRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddRecordedExerciseRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/iteration/set": {
+      "post": {
+        "tags": [
+          "Iteration"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddExerciseSetRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddExerciseSetRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddExerciseSetRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/iteration/equipment": {
+      "post": {
+        "tags": [
+          "Iteration"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddEquipmentInstanceRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddEquipmentInstanceRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddEquipmentInstanceRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AddCircuitRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "AddEquipmentInstanceRequest": {
+        "type": "object",
+        "properties": {
+          "circuitId": {
+            "type": "string",
+            "nullable": true
+          },
+          "iterationId": {
+            "type": "string",
+            "nullable": true
+          },
+          "itemId": {
+            "type": "string",
+            "nullable": true
+          },
+          "occurrenceId": {
+            "type": "string",
+            "nullable": true
+          },
+          "setId": {
+            "type": "string",
+            "nullable": true
+          },
+          "equipmentId": {
+            "type": "string",
+            "nullable": true
+          },
+          "count": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "load": {
+            "type": "number",
+            "format": "float"
+          },
+          "loadUnit": {
+            "$ref": "#/components/schemas/LoadUnit"
+          }
+        },
+        "additionalProperties": false
+      },
+      "AddEquipmentRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "canBeUsedInMultiples": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "AddExerciseRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "repetitionType": {
+            "$ref": "#/components/schemas/RepetitionType"
+          },
+          "defaultEquipmentId": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "AddExerciseSetRequest": {
+        "type": "object",
+        "properties": {
+          "circuitId": {
+            "type": "string",
+            "nullable": true
+          },
+          "iterationId": {
+            "type": "string",
+            "nullable": true
+          },
+          "itemId": {
+            "type": "string",
+            "nullable": true
+          },
+          "occurrenceId": {
+            "type": "string",
+            "nullable": true
+          },
+          "repetitionMeasurement": {
+            "type": "string",
+            "nullable": true
+          },
+          "setIndex": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "repetitionType": {
+            "$ref": "#/components/schemas/RepetitionType"
+          }
+        },
+        "additionalProperties": false
+      },
+      "AddItemRequest": {
+        "type": "object",
+        "properties": {
+          "circuitId": {
+            "type": "string",
+            "nullable": true
+          },
+          "index": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "exerciseId": {
+            "type": "string",
+            "nullable": true
+          },
+          "occurrenceWeight": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "AddRecordedExerciseRequest": {
+        "type": "object",
+        "properties": {
+          "circuitId": {
+            "type": "string",
+            "nullable": true
+          },
+          "iterationId": {
+            "type": "string",
+            "nullable": true
+          },
+          "itemId": {
+            "type": "string",
+            "nullable": true
+          },
+          "exerciseId": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Circuit": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "CircuitIteration": {
+        "type": "object",
+        "properties": {
+          "circuitId": {
+            "type": "string",
+            "nullable": true
+          },
+          "recordedExercises": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RecordedExercise"
+            },
+            "nullable": true
+          },
+          "dateStarted": {
+            "type": "string",
+            "nullable": true
+          },
+          "dateCompleted": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "CircuitIterationListing": {
+        "type": "object",
+        "properties": {
+          "circuitId": {
+            "type": "string",
+            "nullable": true
+          },
+          "iterationId": {
+            "type": "string",
+            "nullable": true
+          },
+          "dateStarted": {
+            "type": "string",
+            "nullable": true
+          },
+          "dateCompleted": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Equipment": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "canBeUsedInMultiples": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "EquipmentInstance": {
+        "type": "object",
+        "properties": {
+          "equipmentId": {
+            "type": "string",
+            "nullable": true
+          },
+          "count": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "load": {
+            "type": "number",
+            "format": "float"
+          },
+          "loadUnit": {
+            "$ref": "#/components/schemas/LoadUnit"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Exercise": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "repetitionType": {
+            "$ref": "#/components/schemas/RepetitionType"
+          },
+          "defaultEquipment": {
+            "$ref": "#/components/schemas/Equipment"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ExerciseSet": {
+        "type": "object",
+        "properties": {
+          "index": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "repetitionSize": {
+            "type": "string",
+            "nullable": true
+          },
+          "equipmentItems": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EquipmentInstance"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Item": {
+        "type": "object",
+        "properties": {
+          "itemId": {
+            "type": "string",
+            "nullable": true
+          },
+          "index": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "occurrenceWeight": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "exercise": {
+            "$ref": "#/components/schemas/Exercise"
+          }
+        },
+        "additionalProperties": false
+      },
+      "LoadUnit": {
+        "enum": [
+          0,
+          1
+        ],
+        "type": "integer",
+        "format": "int32"
+      },
+      "RecordedExercise": {
+        "type": "object",
+        "properties": {
+          "exerciseId": {
+            "type": "string",
+            "nullable": true
+          },
+          "dateCompleted": {
+            "type": "string",
+            "nullable": true
+          },
+          "exerciseSets": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ExerciseSet"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "RepetitionType": {
+        "enum": [
+          0,
+          1
+        ],
+        "type": "integer",
+        "format": "int32"
+      }
+    }
+  }
+}

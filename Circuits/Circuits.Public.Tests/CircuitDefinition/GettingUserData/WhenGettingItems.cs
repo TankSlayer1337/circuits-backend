@@ -39,7 +39,7 @@ namespace Circuits.Public.Tests.CircuitDefinition.GettingUserData
 
             // WHEN getting items
             var circuitsRepository = BuildCircuitsRepository();
-            var results = await circuitsRepository.GetItemsAsync(authorizationHeader, circuitId);
+            var results = await circuitsRepository.GetItemsAsyncWithAuthorizationHeader(authorizationHeader, circuitId);
 
             // THEN the correct item representations are returned
             IEnumerable<Item> expectedResults = CreateItems(itemEntries, exerciseEntries, equipmentEntries);

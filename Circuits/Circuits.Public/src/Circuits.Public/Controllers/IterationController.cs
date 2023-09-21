@@ -24,7 +24,7 @@ namespace Circuits.Public.Controllers
         }
 
         [HttpGet("iterations")]
-        public async Task<ActionResult<List<CircuitIterationListing>>> GetIterations([FromQuery] string circuitId)
+        public async Task<ActionResult<List<CircuitIterationListing>>> GetIterationListings([FromQuery] string circuitId)
         {
             var authorizationHeader = Utils.GetAuthorizationHeader(Request);
             return await _circuitIterationRepository.GetIterationsAsync(authorizationHeader, circuitId);
@@ -37,6 +37,7 @@ namespace Circuits.Public.Controllers
             return await _circuitIterationRepository.GetIterationAsync(authorizationHeader, circuitId, iterationId);
         }
 
+        // TODO: remove this as it won't be needed when iteration is filled with empty items.
         [HttpPost("iteration/exercise")]
         public async Task<ActionResult<string>> AddExercise([FromBody] AddRecordedExerciseRequest request)
         {

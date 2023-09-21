@@ -67,11 +67,11 @@ namespace Circuits.Public.Controllers
             return await _circuitsRepository.AddItemAsync(authorizationHeader, request);
         }
 
-        [HttpGet("items/{circuitId}")]
+        [HttpGet(Items+"/{circuitId}")]
         public async Task<ActionResult<List<Item>>> GetCircuitItems(string circuitId)
         {
             var authorizationHeader = Utils.GetAuthorizationHeader(Request);
-            return await _circuitsRepository.GetItemsAsync(authorizationHeader, circuitId);
+            return await _circuitsRepository.GetItemsAsyncWithAuthorizationHeader(authorizationHeader, circuitId);
         }
     }
 }
